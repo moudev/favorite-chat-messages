@@ -1,7 +1,7 @@
-import { updateAction, getTabs, getActions, updateCSS } from "../utils.js"
+import { updateAction, getTabs, getActions } from "../utils.js"
 
-async function createMenu() {
-  const container = document.querySelector("#rules")
+async function createMessages() {
+  const container = document.querySelector("#container")
 
   const actions = await getActions()
 
@@ -41,19 +41,17 @@ async function createMenu() {
 }
 
 async function init() {
-  const container = document.querySelector("#rules")
-  container.addEventListener("click", updateAction)
+  const container = document.querySelector("#container")
 
   const tabs = await getTabs()
 
-  // the active tab must be twitter.com to display the menu
+  // the active tab must be twitch.tv to display the saved messages
   if (tabs.length === 0) {
-    container.innerHTML = "No twitter"  
+    container.innerHTML = "No Twitch"
     return
   }
   
-  await createMenu()
-  updateCSS()
+  await createMessages()
 }
 
 init()

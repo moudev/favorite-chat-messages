@@ -5,10 +5,29 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="popup.css" />
-  <title>Reduce Twitter</title>
+  <title>One click Twitch message</title>
 </head>
 <body>
-  <div id="rules"></div>
+  <div id="container">
+    <div id="actions">
+      <p>Title</p>
+      <input />
+      <p>Message</p>
+      <textarea>LUL LUL LUL LUL LUL LUL</textarea>
+      <button>Save</button>
+    </div>
+    <div id="saved-messages"">
+      <div class="message" style="border: 1px solid gray">
+        <p>Title</p>
+        <span class="message-text">LUL LUL LUL LUL</span>
+        <div class="message-actions">
+          <button>Edit</button>
+          <button>Copy</button>
+          <button>Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <script src="popup.js" type="module"></script>
 </html>
