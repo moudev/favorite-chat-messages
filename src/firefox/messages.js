@@ -24,7 +24,9 @@ async function deleteMessage(messageIndex) {
   const messages = await getMessages()
 }
 
-async function copyMessage(messageText) {}
+function copyMessage(messageText) {
+  navigator.clipboard.writeText(messageText)
+}
 
 async function manageMessage(e) {
   if (
@@ -34,9 +36,9 @@ async function manageMessage(e) {
     return
   }
 
-  const messageIndex = e.target.getAttribute(DATA_INDEX_HTML_ATTRIBUTE)
-  const messageTitle = e.target.getAttribute(DATA_TITLE_HTML_ATTRIBUTE)
-  const messageText = e.target.getAttribute(DATA_TEXT_HTML_ATTRIBUTE)
+  const messageIndex = e.target.parentNode.parentNode.getAttribute(DATA_INDEX_HTML_ATTRIBUTE) || -1
+  const messageTitle = e.target.parentNode.parentNode.getAttribute(DATA_TITLE_HTML_ATTRIBUTE) || ""
+  const messageText = e.target.parentNode.parentNode.getAttribute(DATA_TEXT_HTML_ATTRIBUTE) || ""
   
   const typeAction = e.target.getAttribute(DATA_TYPE_HTML_ATTRIBUTE)
 
