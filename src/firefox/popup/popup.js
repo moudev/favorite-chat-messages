@@ -1,42 +1,67 @@
-import { updateAction, getTabs, getActions } from "../utils.js"
+import { updateMessage, getTabs, getMessages } from "../utils.js"
 
-async function createMessages() {
-  const container = document.querySelector("#container")
+async function createMessageList() {
+  const messagesContainerNode = document.querySelector("#saved-messages")
 
-  const actions = await getActions()
+  const messages = await getMessages()
 
-  actions.map(action => {
-    const ruleContainer = document.createElement("div")
-    
-    const title = document.createElement("h3")  
-    title.textContent = action.screenName
-    
-    ruleContainer.appendChild(title)
+  // message box
+  const messageContainer = document.createElement("div")
+  messageContainer.className = "message"
 
-    const inputsContainer = document.createElement("div")
-    inputsContainer.classList.add("inputs-container")
+  // texts
+  const messageTitleNode = document.createElement("p")
+  messageTitleNode.className = "message-title"
 
-    action.rules.map((rule) => {
-      const ruleNode = document.createElement("p")
-      ruleNode.textContent = rule.screenName
+  const messageTextNode = document.createElement("span")
+  messageTextNode.className = "message-text"
 
-      const check = document.createElement("input")
-      check.setAttribute("type", "checkbox")
-      check.checked = rule.apply
+  // actions
+  const messageActionsContainer = document.createElement("div")
+  messageActionsContainer.className = "message-actions"
 
-      const idAttribute = `${action.id}-${rule.id}`
-      check.setAttribute("id", idAttribute)
+  const copyButtonNode = document.createElement("button")
+  copyButtonNode.innerText = "Copy"
+  copyButtonNode.className = "copy-button"
 
-      const label = document.createElement("label")
-      label.textContent = rule.screenName
-      label.setAttribute("for", idAttribute)
+  const editButtonNode = document.createElement("button")
+  editButtonNode.innerText = "Edit"
+  editButtonNode.className = "edit-button"
 
-      inputsContainer.appendChild(check)
-      inputsContainer.appendChild(label)
-    })
+  const deleteButtonNode = document.createElement("button")
+  deleteButtonNode.innerText = "Delete"
+  deleteButtonNode.className = "delete-button"
 
-    ruleContainer.appendChild(inputsContainer)
-    container.appendChild(ruleContainer)
+  const sendButtonNode = document.createElement("button")
+  sendButtonNode.innerText = "Send"
+  sendButtonNode.className = "send-button"  
+
+  messageActionsContainer.appendChild(copyButtonNode)
+  messageActionsContainer.appendChild(editButtonNode)
+  messageActionsContainer.appendChild(deleteButtonNode)
+  messageActionsContainer.appendChild(sendButtonNode)
+
+  // add messages
+  const tmpData = [
+    {title: "title", message: "mesage"},
+    {title: "title", message: "mesage"},
+    {title: "title", message: "mesage"},
+    {title: "title", message: "mesage"},
+    {title: "title", message: "mesage"},
+    {title: "title", message: "mesage"}
+  ]
+
+  tmpData.map((message)=> {
+    const container = messageContainer.cloneNode(false)
+
+    messageTitleNode.innerText = message.title || "Title"
+    messageTextNode.innerText = message.message || "LUL"
+
+    container.appendChild(messageTitleNode.cloneNode(true))
+    container.appendChild(messageTextNode.cloneNode(true))
+    container.appendChild(messageActionsContainer.cloneNode(true))
+
+    messagesContainerNode.appendChild(container)
   })
 }
 
@@ -47,11 +72,11 @@ async function init() {
 
   // the active tab must be twitch.tv to display the saved messages
   if (tabs.length === 0) {
-    container.innerHTML = "No Twitch"
-    return
+    // container.innerHTML = "No Twitch"
+    // return
   }
-  
-  await createMessages()
+
+  await createMessageList()
 }
 
 init()
