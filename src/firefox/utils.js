@@ -9,14 +9,6 @@ function manageLocalStorage(action = "get", data = null, key = "twitch-messages"
   }
 }
 
-async function getMessages() {
-  const storageActions = await manageLocalStorage("get")  
-  if (storageActions && storageActions.length > 0) {
-    return storageActions
-  }
-  return []
-}
-
 function getTabs() {
   return browser.tabs.query({
     active: true,
@@ -24,12 +16,4 @@ function getTabs() {
   })
 }
 
-async function updateMessage(index, title, message) {
-  const messages = await getMessages()  
-  messages[index].title = title
-  messages[index].message = message
-
-  await manageLocalStorage("set", messages)
-}
-
-export { updateMessage, getTabs, getMessages }
+export { getTabs, manageLocalStorage }

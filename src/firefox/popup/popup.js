@@ -1,7 +1,14 @@
-import { updateMessage, getTabs, getMessages } from "../utils.js"
+import { getTabs } from "../utils.js"
+import { manageMessage, getMessages } from "../messages.js"
+
+const MESSAGES_CONTAINER_CSS_ID = "#saved-messages"
+export const DATA_TYPE_HTML_ATTRIBUTE = "data-type"
+export const DATA_INDEX_HTML_ATTRIBUTE = "data-index"
+export const DATA_TITLE_HTML_ATTRIBUTE = "data-title"
+export const DATA_TEXT_HTML_ATTRIBUTE = "data-text"
 
 async function createMessageList() {
-  const messagesContainerNode = document.querySelector("#saved-messages")
+  const messagesContainerNode = document.querySelector(MESSAGES_CONTAINER_CSS_ID)
 
   const messages = await getMessages()
 
@@ -22,19 +29,23 @@ async function createMessageList() {
 
   const copyButtonNode = document.createElement("button")
   copyButtonNode.innerText = "Copy"
-  copyButtonNode.className = "copy-button"
+  copyButtonNode.className = "action-button"
+  copyButtonNode.setAttribute(DATA_TYPE_HTML_ATTRIBUTE, "copy")
 
   const editButtonNode = document.createElement("button")
   editButtonNode.innerText = "Edit"
-  editButtonNode.className = "edit-button"
+  editButtonNode.className = "action-button"
+  editButtonNode.setAttribute(DATA_TYPE_HTML_ATTRIBUTE, "edit")
 
   const deleteButtonNode = document.createElement("button")
   deleteButtonNode.innerText = "Delete"
-  deleteButtonNode.className = "delete-button"
+  deleteButtonNode.className = "action-button"
+  deleteButtonNode.setAttribute(DATA_TYPE_HTML_ATTRIBUTE, "delete")
 
   const sendButtonNode = document.createElement("button")
   sendButtonNode.innerText = "Send"
-  sendButtonNode.className = "send-button"  
+  sendButtonNode.className = "action-button"
+  sendButtonNode.setAttribute(DATA_TYPE_HTML_ATTRIBUTE, "send")
 
   messageActionsContainer.appendChild(copyButtonNode)
   messageActionsContainer.appendChild(editButtonNode)
@@ -51,11 +62,18 @@ async function createMessageList() {
     {title: "title", message: "mesage"}
   ]
 
-  tmpData.map((message)=> {
+  tmpData.map((message, index)=> {
     const container = messageContainer.cloneNode(false)
 
-    messageTitleNode.innerText = message.title || "Title"
-    messageTextNode.innerText = message.message || "LUL"
+    const title = message.title || "Title"
+    const text = message.message || "LUL"
+
+    container.setAttribute(DATA_INDEX_HTML_ATTRIBUTE, index)
+    container.setAttribute(DATA_TITLE_HTML_ATTRIBUTE, title)
+    container.setAttribute(DATA_TEXT_HTML_ATTRIBUTE, text)
+
+    messageTitleNode.innerText = title
+    messageTextNode.innerText = text
 
     container.appendChild(messageTitleNode.cloneNode(true))
     container.appendChild(messageTextNode.cloneNode(true))
@@ -66,7 +84,8 @@ async function createMessageList() {
 }
 
 async function init() {
-  const container = document.querySelector("#container")
+  const container = document.querySelector(MESSAGES_CONTAINER_CSS_ID)
+  container.addEventListener("click", manageMessage)
 
   const tabs = await getTabs()
 
