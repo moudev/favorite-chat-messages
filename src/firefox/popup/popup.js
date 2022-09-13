@@ -1,11 +1,14 @@
 import { getTabs, manageLocalStorage } from "../utils.js"
-import { manageMessage, getMessages } from "../messages.js"
+import { manageMessage, getMessages, saveMessage } from "../messages.js"
 
 const MESSAGES_CONTAINER_CSS_ID = "#saved-messages"
 export const DATA_TYPE_HTML_ATTRIBUTE = "data-type"
 export const DATA_INDEX_HTML_ATTRIBUTE = "data-index"
 export const DATA_TITLE_HTML_ATTRIBUTE = "data-title"
 export const DATA_TEXT_HTML_ATTRIBUTE = "data-text"
+const SAVE_BUTTON_CSS_ID = "save-button"
+const MESSAGE_TITLE_INPUT_CSS_ID = "message-title"
+const MESSAGE_TEXT_INPUT_CSS_ID = "message-text"
 
 export async function createMessageList() {
   const messagesContainerNode = document.querySelector(MESSAGES_CONTAINER_CSS_ID)
@@ -61,8 +64,8 @@ export async function createMessageList() {
   messages.map((message, index)=> {
     const container = messageContainer.cloneNode(false)
 
-    const title = message.title || "Title"
-    const text = message.message || "LUL"
+    const title = message.title || "Default title"
+    const text = message.text || "Default text"
 
     container.setAttribute(DATA_INDEX_HTML_ATTRIBUTE, index)
     container.setAttribute(DATA_TITLE_HTML_ATTRIBUTE, title)
@@ -79,9 +82,20 @@ export async function createMessageList() {
   })
 }
 
+async function saveMessageAndUpdateMessageList() {
+  const messageTitle = document.getElementById(MESSAGE_TITLE_INPUT_CSS_ID).value
+  const messageText = document.getElementById(MESSAGE_TEXT_INPUT_CSS_ID).value
+console.log(messageText)
+  await saveMessage(messageTitle, messageText)
+  await createMessageList()
+}
+
 async function init() {
   const container = document.querySelector(MESSAGES_CONTAINER_CSS_ID)
   container.addEventListener("click", manageMessage)
+
+  const saveButton = document.getElementById(SAVE_BUTTON_CSS_ID)
+  saveButton.addEventListener("click", saveMessageAndUpdateMessageList)
 
   const tabs = await getTabs()
 

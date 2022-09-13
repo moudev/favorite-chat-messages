@@ -15,6 +15,12 @@ async function getMessages() {
   return []
 }
 
+async function saveMessage(messageTitle, messageText) {
+  const messages = await getMessages()
+  messages.unshift({ title: messageTitle, text: messageText })
+  manageLocalStorage("set", messages)
+}
+
 async function editMessage(messageIndex, messageTitle, messageText) {
   const messages = await getMessages()
 }
@@ -68,4 +74,4 @@ async function manageMessage(e) {
   }
 }
 
-export { getMessages, manageMessage }
+export { getMessages, manageMessage, saveMessage }
