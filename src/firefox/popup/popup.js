@@ -1,4 +1,4 @@
-import { getTabs } from "../utils.js"
+import { getTabs, manageLocalStorage } from "../utils.js"
 import { manageMessage, getMessages } from "../messages.js"
 
 const MESSAGES_CONTAINER_CSS_ID = "#saved-messages"
@@ -7,8 +7,9 @@ export const DATA_INDEX_HTML_ATTRIBUTE = "data-index"
 export const DATA_TITLE_HTML_ATTRIBUTE = "data-title"
 export const DATA_TEXT_HTML_ATTRIBUTE = "data-text"
 
-async function createMessageList() {
+export async function createMessageList() {
   const messagesContainerNode = document.querySelector(MESSAGES_CONTAINER_CSS_ID)
+  messagesContainerNode.innerHTML = ""
 
   const messages = await getMessages()
 
@@ -53,16 +54,11 @@ async function createMessageList() {
   messageActionsContainer.appendChild(sendButtonNode)
 
   // add messages
-  const tmpData = [
-    {title: "title", message: "mesage"},
-    {title: "title", message: "mesage"},
-    {title: "title", message: "mesage"},
-    {title: "title", message: "mesage"},
-    {title: "title", message: "mesage"},
-    {title: "title", message: "mesage"}
-  ]
+  if (messages.length === 0) {
+    messagesContainerNode.innerHTML = "<strong>No saved messages</strong>"
+  }
 
-  tmpData.map((message, index)=> {
+  messages.map((message, index)=> {
     const container = messageContainer.cloneNode(false)
 
     const title = message.title || "Title"

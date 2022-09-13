@@ -3,7 +3,8 @@ import {
   DATA_TYPE_HTML_ATTRIBUTE,
   DATA_INDEX_HTML_ATTRIBUTE,
   DATA_TITLE_HTML_ATTRIBUTE,
-  DATA_TEXT_HTML_ATTRIBUTE
+  DATA_TEXT_HTML_ATTRIBUTE,
+  createMessageList,
 } from "./popup/popup.js"
 
 async function getMessages() {
@@ -22,6 +23,12 @@ async function sendMessage(messageText) {}
 
 async function deleteMessage(messageIndex) {
   const messages = await getMessages()
+
+  if (messages[messageIndex]) {
+    messages.splice(messageIndex, 1)
+    manageLocalStorage("set", messages)
+    await createMessageList()
+  }
 }
 
 function copyMessage(messageText) {
@@ -39,24 +46,20 @@ async function manageMessage(e) {
   const messageIndex = e.target.parentNode.parentNode.getAttribute(DATA_INDEX_HTML_ATTRIBUTE) || -1
   const messageTitle = e.target.parentNode.parentNode.getAttribute(DATA_TITLE_HTML_ATTRIBUTE) || ""
   const messageText = e.target.parentNode.parentNode.getAttribute(DATA_TEXT_HTML_ATTRIBUTE) || ""
-  
+
   const typeAction = e.target.getAttribute(DATA_TYPE_HTML_ATTRIBUTE)
 
   switch (typeAction.toLowerCase()) {
     case "edit":
-      console.log("update action")
       editMessage(messageIndex, messageTitle, messageText)
       break;
     case "send":
-      console.log("send action")
       sendMessage(messageText)
       break;
     case "delete":
-      console.log("delete action")
       deleteMessage(messageIndex)
       break;
     case "copy":
-      console.log("copy action")
       copyMessage(messageText)
       break;
     default:
