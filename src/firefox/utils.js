@@ -16,4 +16,12 @@ function getTabs() {
   })
 }
 
-export { getTabs, manageLocalStorage }
+function onExecuted(result) {
+  console.log('Success', result);
+}
+
+function onError(error) {
+  console.log('Error:', error);
+}
+
+export { getTabs, manageLocalStorage, onExecuted, onError }

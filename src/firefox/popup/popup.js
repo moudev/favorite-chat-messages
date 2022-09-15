@@ -1,4 +1,4 @@
-import { getTabs, manageLocalStorage } from "../utils.js"
+import { getTabs, manageLocalStorage, onExecuted, onError } from "../utils.js"
 import { manageMessage, getMessages, saveMessage } from "../messages.js"
 
 const MESSAGES_CONTAINER_CSS_ID = "#saved-messages"
@@ -106,6 +106,17 @@ async function init() {
   }
 
   await createMessageList()
+  /**
+    based on:
+      - https://github.com/mdn/webextensions-examples/blob/master/context-menu-copy-link-with-types/background.js#L19
+      - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/executeScript
+
+    twitch.js has the function to send the message
+  */ 
+  const loadScripFile = browser.tabs.executeScript({
+    file: "/twitch.js",
+  })
+  loadScripFile.then(onExecuted, onError);
 }
 
 init()

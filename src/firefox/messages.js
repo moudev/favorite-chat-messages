@@ -1,4 +1,4 @@
-import { manageLocalStorage } from "./utils.js"
+import { manageLocalStorage, onError, onExecuted } from "./utils.js"
 import {
   DATA_TYPE_HTML_ATTRIBUTE,
   DATA_INDEX_HTML_ATTRIBUTE,
@@ -25,7 +25,14 @@ async function editMessage(messageIndex, messageTitle, messageText) {
   const messages = await getMessages()
 }
 
-async function sendMessage(messageText) {}
+async function sendMessage(messageText) {
+  // based on: https://github.com/mdn/webextensions-examples/blob/master/context-menu-copy-link-with-types/background.js#L19
+  // sendTwitchMessage() was loaded with twitch.js on plugin init
+  const executeSendMessage = browser.tabs.executeScript({
+    code: `sendTwitchMessage("${messageText}")`,
+  });
+  executeSendMessage.then(onExecuted, onError);
+}
 
 async function deleteMessage(messageIndex) {
   const messages = await getMessages()
