@@ -1,7 +1,30 @@
-![icon-128](https://user-images.githubusercontent.com/13499566/154863406-da2a087d-5e4d-47b2-bfbf-2536c3b3dc2f.png)
+# One click Twitch message
 
-# Reduce Twitter
+Create collections of messages and send them with a single click.
 
-Reduce/eliminate Twitter interactions like comment, retweet, like, new tweet. You can remove or disable them.
+## Development
 
-![screenshot](https://user-images.githubusercontent.com/13499566/154863470-d9893c53-71dd-438f-a608-f697b099bda8.PNG)
+```bash
+npm run serve
+```
+
+Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new script:
+
+```javascript
+// ==UserScript==
+// @name         One Click Twitch Message
+// @description  Create collections of messages and send them with a single click.
+// @version      0.0.1
+// @match        https://*.twitch.tv/*
+// @grant        none
+// ==/UserScript==
+
+(function oneClickTwitchMessage() {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://127.0.0.1:5173/one-click-twitch-message.umd.js';
+    const head = document.getElementsByTagName('head')[0];
+    if (!head) return;
+    head.appendChild(script);
+})()
+```
