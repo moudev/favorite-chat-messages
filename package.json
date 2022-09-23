@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build:firefox": "web-ext build --source-dir ./src/firefox --artifacts-dir ./src/firefox/build",
-    "dev": "vite build"
+    "dev": "vite build",
+    "serve": "vite serve"
   },
   "devDependencies": {
     "path": "^0.12.7",
