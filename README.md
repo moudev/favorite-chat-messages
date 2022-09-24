@@ -4,6 +4,16 @@ Create collections of messages and send them with a single click.
 
 ## Development
 
+Execute the two commands at the same time on different consoles.
+
+In a console build the files and watch the changes:
+
+```bash
+npm run dev
+```
+
+In another console to serve the files:
+
 ```bash
 npm run serve
 ```
