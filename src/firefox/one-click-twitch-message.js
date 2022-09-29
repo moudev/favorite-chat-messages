@@ -1,3 +1,5 @@
-((currentScript) => {
-  console.log("currentScript", currentScript)
-})(document.currentScript)
+import { PickerButton } from "./components/PickerButton"
+
+(() => {
+  new PickerButton()
+})()

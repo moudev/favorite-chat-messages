@@ -1,7 +1,13 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  plugins: [react()],  
+  // https://github.com/vitejs/vite/issues/1973
+  define: {
+    'process.env': {}
+  },
   // https://vitejs.dev/config/build-options.html#build-lib
   build: {
     lib: {
