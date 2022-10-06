@@ -3,6 +3,13 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  devServer: {
+    port: '5173',
+    allowedHosts: ['127.0.0.1', '.twitch.tv'],
+    static: {
+      directory: path.resolve('./build'),
+    },
+  },
   entry: {
     "one-click-twitch-message": [
       './src/firefox/one-click-twitch-message.js',
