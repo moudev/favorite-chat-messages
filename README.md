@@ -32,7 +32,7 @@ Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new sc
 (function oneClickTwitchMessage() {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'http://127.0.0.1:5173/one-click-twitch-message.umd.js';
+    script.src = 'http://127.0.0.1:5173/one-click-twitch-message.js';
     const head = document.getElementsByTagName('head')[0];
     if (!head) return;
     head.appendChild(script);

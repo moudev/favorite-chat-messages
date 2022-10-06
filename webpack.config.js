@@ -1,0 +1,70 @@
+// copy of: https://github.com/night/betterttv/blob/7.4.40/webpack.config.js
+const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  entry: {
+    "one-click-twitch-message": [
+      './src/firefox/one-click-twitch-message.js',
+    ],
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve('./build'),
+  },  
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(jsx|js)$/,
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                "targets": "defaults" 
+              }],
+              '@babel/preset-react'
+            ]
+          }
+        }]
+      },
+      {
+        test: /(\.less|\.css)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  'postcss-hexrgba',
+                  'autoprefixer',
+                  'precss',
+                ],
+              },
+            },
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+                modifyVars: {'@reset-import': false},
+              },
+            },
+          },
+        ],
+      },
+    ]
+  }
+}

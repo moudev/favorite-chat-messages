@@ -1,4 +1,4 @@
-import { PickerButton } from "./components/PickerButton"
+import { PickerButton } from "./components/PickerButton.jsx"
 
 (() => {
   new PickerButton()
