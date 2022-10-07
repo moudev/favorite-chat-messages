@@ -1,11 +1,11 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { Whisper, Button } from 'rsuite';
+import 'rsuite/styles/index.less'
+
+import { PopoverMenu } from "./PopoverMenu.jsx";
 
 const CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR = '.chat-input div[data-test-selector="chat-input-buttons-container"]'
-
-const Button = () => {
-  return <button>Button</button>
-}
 
 class PickerButton {
   constructor() {
@@ -25,7 +25,16 @@ class PickerButton {
     buttonContainer.setAttribute('data-a-target', 'one-click-twitch-message-picker-button-container')
     rightContainer.insertBefore(buttonContainer, rightContainer.lastChild);
   
-    ReactDOM.render(<Button />, buttonContainer)  
+    ReactDOM.render(
+      <Whisper
+        placement="topEnd"
+        trigger="click"
+        speaker={<PopoverMenu />}
+      >
+        <Button>Click</Button>
+      </Whisper>,
+      buttonContainer
+    )
   }
 }
 

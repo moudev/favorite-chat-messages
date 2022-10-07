@@ -36,5 +36,10 @@ Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new sc
     const head = document.getElementsByTagName('head')[0];
     if (!head) return;
     head.appendChild(script);
+
+    const style = document.createElement("link")
+    style.rel="stylesheet"
+    style.href="http://127.0.0.1:5173/one-click-twitch-message.css"
+    head.appendChild(style);
 })()
 ```
