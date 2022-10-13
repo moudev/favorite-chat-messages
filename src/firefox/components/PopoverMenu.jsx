@@ -1,6 +1,8 @@
 import React from "react"
 import { CustomProvider, Popover, Button, Input } from 'rsuite';
 
+import { MessageItem } from "./MessageItem.jsx"
+
 const PopoverMenuHeader = () => {
   return (
     <div
@@ -9,12 +11,16 @@ const PopoverMenuHeader = () => {
         gap: "0.5rem"
       }}
     >
-      <Input
-        as="textarea"
-        rows={2}
-        placeholder="Message"
-        style={{ flex: "2"}}
-      />
+      <div style={{ flex: '2', display: 'flex', flexDirection: "column" }}>
+        <Input
+          placeholder="Title"
+        />
+        <Input
+          as="textarea"
+          rows={2}
+          placeholder="Message"
+        />
+      </div>
       <div
         style={{ display: 'flex', alignItems: 'center' }}
       >
@@ -29,7 +35,7 @@ const PopoverMenuHeader = () => {
 const PopoverMenuBody = () => {
   return (
     <div style={{ height: '350px' }}>
-      <p>Content</p>
+      <MessageItem />
     </div>
   )
 }
