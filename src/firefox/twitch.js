@@ -6,6 +6,8 @@ const CHAT_INPUT_NODE_OPTIONS = [
   document.querySelector('div[data-a-target="chat-input"')
 ]
 
+const CHAT_CONTAINER = document.querySelector('section[data-test-selector="chat-room-component-layout"]')
+
 // NOTE: only works when the input is a textarea. It works in firefox developer edition
 // It doesn't work because cannot find the react instance in the element.
 // It appears on the console but not when trying to access with the key.
@@ -17,6 +19,19 @@ function getReactInstance(element) {
   }
 
   return null;
+}
+
+export function getCurrentChat() {
+  let currentChat;
+  try {
+    const node = searchReactParents(
+      getReactInstance(CHAT_CONTAINER),
+      (n) => n.stateNode && n.stateNode.props && n.stateNode.props.onSendMessage
+    );
+    currentChat = node.stateNode;
+  } catch (_) {}
+
+  return currentChat;
 }
 
 function  getChatInputEditor(element = null) {
