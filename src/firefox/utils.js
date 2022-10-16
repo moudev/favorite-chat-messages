@@ -9,19 +9,4 @@ function manageLocalStorage(action = "get", data = null, key = "twitch-messages"
   }
 }
 
-function getTabs() {
-  return browser.tabs.query({
-    active: true,
-    url: "*://*.twitch.tv/*"
-  })
-}
-
-function onExecuted(result) {
-  console.log('Success', result);
-}
-
-function onError(error) {
-  console.log('Error:', error);
-}
-
-export { getTabs, manageLocalStorage, onExecuted, onError }
+export { manageLocalStorage }
