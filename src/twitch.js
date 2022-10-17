@@ -21,7 +21,7 @@ function getReactInstance(element) {
   return null;
 }
 
-export function getCurrentChat() {
+function getCurrentChat() {
   let currentChat;
   try {
     const node = searchReactParents(
@@ -123,7 +123,8 @@ function setChatInputValue(text, shouldFocus = true) {
   }
 }
 
-// this function is called from messages.js using inject script
-function sendTwitchMessage (messageText) {
-  setChatInputValue(messageText)
+export const sendTwitchMessage = (message = "") => {
+  const currentChat = getCurrentChat()
+  if (!currentChat) return;
+  currentChat.props.onSendMessage(message)
 }

@@ -2,13 +2,7 @@ import React from "react"
 import { CustomProvider, Popover, Button, Input } from 'rsuite';
 
 import { MessageItem } from "./MessageItem.jsx"
-import { getCurrentChat } from "../twitch.js"
-
-const sendTwitchMessage = () => {
-  const currentChat = getCurrentChat()
-  if (!currentChat) return;
-  currentChat.props.onSendMessage("test")
-}
+import { sendTwitchMessage } from "../twitch.js"
 
 const PopoverMenuHeader = () => {
   return (
@@ -20,9 +14,6 @@ const PopoverMenuHeader = () => {
     >
       <div style={{ flex: '2', display: 'flex', flexDirection: "column" }}>
         <Input
-          placeholder="Title"
-        />
-        <Input
           as="textarea"
           rows={2}
           placeholder="Message"
@@ -31,7 +22,7 @@ const PopoverMenuHeader = () => {
       <div
         style={{ display: 'flex', alignItems: 'center' }}
       >
-        <Button style={{ flex: "1"}} onClick={() => sendTwitchMessage()}>
+        <Button style={{ flex: "1"}} onClick={() => sendTwitchMessage("jajajaj")}>
           Guardar
         </Button>
       </div>
@@ -41,8 +32,8 @@ const PopoverMenuHeader = () => {
 
 const PopoverMenuBody = () => {
   return (
-    <div style={{ height: '350px' }}>
-      <MessageItem />
+    <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <MessageItem message="test" />
     </div>
   )
 }
