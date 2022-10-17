@@ -7,17 +7,17 @@ module.exports = {
     port: '5173',
     allowedHosts: ['127.0.0.1', '.twitch.tv'],
     static: {
-      directory: path.resolve('./build'),
+      directory: path.resolve('./webpack-build'),
     },
   },
   entry: {
     "one-click-twitch-message": [
-      './src/firefox/one-click-twitch-message.js',
+      './src/one-click-twitch-message.js',
     ],
   },
   output: {
     filename: '[name].js',
-    path: path.resolve('./build'),
+    path: path.resolve('./webpack-build'),
   },  
   plugins: [
     new MiniCssExtractPlugin({
