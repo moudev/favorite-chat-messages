@@ -2,7 +2,13 @@ import React from 'react'
 import { Button } from "rsuite"
 import { sendTwitchMessage } from '../twitch.js'
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({ message, toggleWhisper }) => {
+
+  const sendMessage = (text) => {
+    sendTwitchMessage(text)
+    toggleWhisper()
+  }
+
   return (
     <div style={{ display: 'flex', border: '1px solid #3c3f43', borderRadius: '6px', gap: '1rem', padding: '1rem' }}>
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', flex: '3' }}>
@@ -18,7 +24,7 @@ const MessageItem = ({ message }) => {
       <div style={{ flex: '1', display: 'flex', alignItems: 'center' }}>
         <Button
           size='sm'
-          onClick={()=> sendTwitchMessage(message)}
+          onClick={()=> sendMessage(message)}
         >
           Enviar
         </Button>

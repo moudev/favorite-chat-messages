@@ -30,10 +30,10 @@ const PopoverMenuHeader = () => {
   )
 }
 
-const PopoverMenuBody = () => {
+const PopoverMenuBody = ({ toggleWhisper }) => {
   return (
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <MessageItem message="test" />
+      <MessageItem message="test" toggleWhisper={toggleWhisper} />
     </div>
   )
 }
@@ -47,7 +47,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         style={{ width: '300px', backgroundColor: '#292d33' }}
       >
         <PopoverMenuHeader />
-        <PopoverMenuBody />
+        <PopoverMenuBody toggleWhisper={props.toggleWhisper} />
       </Popover>
     </CustomProvider>
   )

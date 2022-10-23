@@ -1,41 +1,31 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import React, { useRef, useState, useCallback } from "react"
 import { Whisper, Button } from 'rsuite';
-import 'rsuite/styles/index.less'
 
 import { PopoverMenu } from "./PopoverMenu.jsx";
 
-const CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR = '.chat-input div[data-test-selector="chat-input-buttons-container"]'
+const PickerButton = () => {
+  const [whisperOpen, setWhisperOpen] = useState(false)
+  const whisperRef = useRef(null)
 
-class PickerButton {
-  constructor() {
-    this.config()
-  }
+  const toggleWhisper = useCallback(
+    whisperOpen ?
+      () => whisperRef.current.close() :
+      () => whisperRef.current.open(),
+    [whisperOpen, whisperRef,]
+  )
 
-  config() {
-    const container = document.querySelector(CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR)
-    console.log("container", container)
-  
-    if (container == null) {
-      return;
-    }
-  
-    const rightContainer = container.lastChild;
-    const buttonContainer = document.createElement('div');
-    buttonContainer.setAttribute('data-a-target', 'one-click-twitch-message-picker-button-container')
-    rightContainer.insertBefore(buttonContainer, rightContainer.lastChild);
-  
-    ReactDOM.render(
-      <Whisper
-        placement="topEnd"
-        trigger="click"
-        speaker={<PopoverMenu />}
-      >
-        <Button>Click</Button>
-      </Whisper>,
-      buttonContainer
-    )
-  }
+  return (
+    <Whisper
+      placement="topEnd"
+      trigger="click"
+      speaker={<PopoverMenu toggleWhisper={toggleWhisper} />}
+      ref={whisperRef}
+      onOpen={() => setWhisperOpen(true)}
+      onClose={() => setWhisperOpen(false)}
+    >
+      <Button>Click</Button>
+    </Whisper>
+  )
 }
 
 export { PickerButton }

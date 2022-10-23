@@ -1,5 +1,5 @@
-import { PickerButton } from "./components/PickerButton.jsx"
+import { Menu } from "./components/Menu.jsx"
 
 (() => {
-  new PickerButton()
+  new Menu()
 })()
