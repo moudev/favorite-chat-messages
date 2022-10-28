@@ -52,11 +52,12 @@ const PopoverMenuBody = ({ toggleWhisper }) => {
       }
 
       {
-        messages.map((message) => (
+        messages.map((message, index) => (
           <MessageItem
             message={message.text}
             key={message.text}
             toggleWhisper={toggleWhisper}
+            index={index}
           />
         ))
       }
