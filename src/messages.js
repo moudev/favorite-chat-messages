@@ -1,9 +1,9 @@
 import { manageLocalStorage } from "./utils.js"
 
-async function getMessages() {
-  const storageActions = await manageLocalStorage("get")  
-  if (storageActions && storageActions.length > 0) {
-    return storageActions
+function getMessages() {
+  const messages = manageLocalStorage("get")
+  if (messages && messages.length > 0) {
+    return messages
   }
   return []
 }

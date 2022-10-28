@@ -3,6 +3,7 @@ import { CustomProvider, Popover, Button, Input } from 'rsuite';
 
 import { MessageItem } from "./MessageItem.jsx"
 import { sendTwitchMessage } from "../twitch.js"
+import { getMessages } from "../messages.js";
 
 const PopoverMenuHeader = () => {
   return (
@@ -31,9 +32,22 @@ const PopoverMenuHeader = () => {
 }
 
 const PopoverMenuBody = ({ toggleWhisper }) => {
+  const messages = getMessages()
   return (
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <MessageItem message="test" toggleWhisper={toggleWhisper} />
+      {
+        (!messages || messages.length === 0) && <p>No saved messages</p>
+      }
+
+      {
+        messages.map((message) => (
+          <MessageItem
+            message={message.text}
+            key={message.text}
+            toggleWhisper={toggleWhisper}
+          />
+        ))
+      }
     </div>
   )
 }
