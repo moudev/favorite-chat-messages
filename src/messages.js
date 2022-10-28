@@ -31,4 +31,4 @@ function copyMessage(messageText) {
   navigator.clipboard.writeText(messageText)
 }
 
-export { getMessages, saveMessage, editMessage, deleteMessage }
+export { getMessages, saveMessage, editMessage, deleteMessage, copyMessage }

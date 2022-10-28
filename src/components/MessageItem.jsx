@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from "rsuite"
 import { sendTwitchMessage } from '../twitch.js'
 
-import { deleteMessage } from '../messages.js'
+import { copyMessage, deleteMessage } from '../messages.js'
 
 const MessageItem = ({ message, toggleWhisper, index }) => {
 
@@ -25,7 +25,7 @@ const MessageItem = ({ message, toggleWhisper, index }) => {
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
           <Button size='xs'>Editar</Button>
           <Button size='xs' onClick={() => deleteMessageByIndex()}>Borrar</Button>
-          <Button size='xs'>Copiar</Button>
+          <Button size='xs' onClick={() => copyMessage(message)}>Copiar</Button>
         </div>
       </div>
       <div style={{ flex: '1', display: 'flex', alignItems: 'center' }}>
