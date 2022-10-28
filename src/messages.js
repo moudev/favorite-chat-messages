@@ -8,9 +8,9 @@ function getMessages() {
   return []
 }
 
-async function saveMessage(messageTitle, messageText) {
+async function saveMessage(messageText) {
   const messages = await getMessages()
-  messages.unshift({ title: messageTitle, text: messageText })
+  messages.unshift({ text: messageText })
   manageLocalStorage("set", messages)
 }
 

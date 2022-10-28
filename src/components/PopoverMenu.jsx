@@ -1,11 +1,22 @@
-import React from "react"
+import React, { useState } from "react"
 import { CustomProvider, Popover, Button, Input } from 'rsuite';
 
 import { MessageItem } from "./MessageItem.jsx"
-import { sendTwitchMessage } from "../twitch.js"
-import { getMessages } from "../messages.js";
+import { getMessages, saveMessage } from "../messages.js";
 
-const PopoverMenuHeader = () => {
+const PopoverMenuHeader = ({ toggleWhisper }) => {
+  const [message, setMessage] = useState("")
+
+  const save = () => {
+    if (!message) {
+      return
+    }
+
+    saveMessage(message)
+    setMessage('')
+    toggleWhisper()
+  }
+
   return (
     <div
       style={{
@@ -18,12 +29,13 @@ const PopoverMenuHeader = () => {
           as="textarea"
           rows={2}
           placeholder="Message"
+          onChange={(text) => setMessage(text)}
         />
       </div>
       <div
         style={{ display: 'flex', alignItems: 'center' }}
       >
-        <Button style={{ flex: "1"}} onClick={() => sendTwitchMessage("jajajaj")}>
+        <Button style={{ flex: "1"}} onClick={() => save()}>
           Guardar
         </Button>
       </div>
@@ -60,7 +72,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         ref={ref}
         style={{ width: '300px', backgroundColor: '#292d33' }}
       >
-        <PopoverMenuHeader />
+        <PopoverMenuHeader toggleWhisper={props.toggleWhisper} />
         <PopoverMenuBody toggleWhisper={props.toggleWhisper} />
       </Popover>
     </CustomProvider>
