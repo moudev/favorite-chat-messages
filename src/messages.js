@@ -14,8 +14,12 @@ async function saveMessage(messageText) {
   manageLocalStorage("set", messages)
 }
 
-async function editMessage(messageIndex, messageTitle, messageText) {
+async function editMessage(messageIndex, messageText) {
   const messages = await getMessages()
+  if (messages[messageIndex]) {
+    messages[messageIndex].text = messageText
+    manageLocalStorage("set", messages)
+  }
 }
 
 async function deleteMessage(messageIndex) {
