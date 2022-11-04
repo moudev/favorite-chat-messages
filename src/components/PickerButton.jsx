@@ -3,6 +3,8 @@ import { Whisper, Button } from 'rsuite';
 
 import { PopoverMenu } from "./PopoverMenu.jsx";
 
+import { getCurrentTwitchEmotes } from "../twitch.js";
+
 const PickerButton = () => {
   const [whisperOpen, setWhisperOpen] = useState(false)
   const whisperRef = useRef(null)
@@ -14,6 +16,7 @@ const PickerButton = () => {
     [whisperOpen, whisperRef,]
   )
 
+  console.log("currentTwitchEmotes", getCurrentTwitchEmotes())
   return (
     <Whisper
       placement="topEnd"

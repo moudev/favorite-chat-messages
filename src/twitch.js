@@ -46,9 +46,28 @@ function  getChatInputEditor(element = null) {
   return chatInputEditor?.stateNode;
 }
 
+function getCurrentTwitchEmotes() {
+  let currentEmotes;
+
+  if (currentEmotes != null) {
+    return currentEmotes;
+  }
+
+  try {
+    const node = searchReactParents(
+      getReactInstance(CHAT_CONTAINER),
+      (n) => n.stateNode?.props?.emoteSetsData?.emoteMap,
+      25
+    );
+
+    currentEmotes = node.stateNode.props.emoteSetsData;
+  } catch (_) {}
+
+  return currentEmotes;
+}
+
 function searchReactParents(node, predicate, maxDepth = 15, depth = 0) {
   try {
-    console.log("searchReactParents", node )
     if (predicate(node)) {
       return node;
     }
@@ -123,8 +142,10 @@ function setChatInputValue(text, shouldFocus = true) {
   }
 }
 
-export const sendTwitchMessage = (message = "") => {
+const sendTwitchMessage = (message = "") => {
   const currentChat = getCurrentChat()
   if (!currentChat) return;
   currentChat.props.onSendMessage(message)
 }
+
+export { sendTwitchMessage, getCurrentTwitchEmotes }
