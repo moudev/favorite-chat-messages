@@ -25,4 +25,29 @@ async function getBetterttvEmotes(userId) {
     .concat(channel)
 }
 
-export { getBetterttvGlobalEmotes, getBetterttvCurrentChannelEmotes, getBetterttvEmotes }
+async function getFrankerfacezGlobalEmotes() {
+  // https://github.com/night/betterttv/blob/7.4.40/src/modules/frankerfacez/global-emotes.js#L34
+  const res = await fetch("https://api.betterttv.net/3/cached/frankerfacez/emotes/global")
+  const emotes = await res.json()
+
+  return emotes
+}
+
+async function getFrankerfacezCurrentChannelEmotes(userId) {
+  // https://github.com/night/betterttv/blob/7.4.40/src/modules/frankerfacez/channel-emotes.js#L35
+  const res = await fetch(`https://api.betterttv.net/3/cached/frankerfacez/users/twitch/${userId}`)
+  const emotes = await res.json()
+
+  return emotes
+}
+
+async function getFrankerfacezEmotes(userId) {
+  const global = await getFrankerfacezGlobalEmotes()
+  const channel = await getFrankerfacezCurrentChannelEmotes(userId)
+
+  return []
+    .concat(global)
+    .concat(channel)
+}
+
+export { getBetterttvEmotes, getFrankerfacezEmotes }
