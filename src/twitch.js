@@ -142,10 +142,24 @@ function setChatInputValue(text, shouldFocus = true) {
   }
 }
 
+const getCurrentChannelInformation = () => {
+  const currentChat = getCurrentChat()
+  const props = currentChat.props
+
+  return {
+    channelID: props.channelID,
+    channelDisplayName: props.channelDisplayName,
+    channelLogin: props.channelLogin,
+    currentUserID: props.userID,
+    currentUserDisplayName: props.currentUserDisplayName,
+    currentUserLogin: props.currentUserLogin,
+  }
+}
+
 const sendTwitchMessage = (message = "") => {
   const currentChat = getCurrentChat()
   if (!currentChat) return;
   currentChat.props.onSendMessage(message)
 }
 
-export { sendTwitchMessage, getCurrentTwitchEmotes }
+export { sendTwitchMessage, getCurrentTwitchEmotes, getCurrentChannelInformation }
