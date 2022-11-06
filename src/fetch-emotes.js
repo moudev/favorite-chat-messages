@@ -1,4 +1,5 @@
 import { getCurrentTwitchEmotes, getCurrentChannelInformation } from "./twitch"
+import toolkikEmojis from "./emoji-toolkit-emojis"
 
 async function getBetterttvGlobalEmotes() {
   // https://github.com/night/betterttv/blob/7.4.40/src/modules/emotes/global-emotes.js#L26
@@ -76,6 +77,10 @@ async function getFrankerfacezEmotes(userId) {
   return emotes
 }
 
+function getToolkitEmojis() {
+  return toolkikEmojis
+}
+
 async function getAllEmotes() {
   const { channelID } = getCurrentChannelInformation()
 
@@ -91,11 +96,13 @@ async function getAllEmotes() {
   if (window.BetterTTV || window.__betterttv) {
     const betterttv = await getBetterttvEmotes(channelID)
     const frankerfacez = await getFrankerfacezEmotes(channelID)
+    const toolkit = getToolkitEmojis()
 
     emotes = {
       ...emotes,
       ...betterttv,
-      ...frankerfacez
+      ...frankerfacez,
+      ...toolkit
     }
   }
 
