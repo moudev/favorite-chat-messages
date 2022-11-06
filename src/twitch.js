@@ -48,6 +48,7 @@ function  getChatInputEditor(element = null) {
 
 function getCurrentTwitchEmotes() {
   let currentEmotes;
+  let emotes = {};
 
   if (currentEmotes != null) {
     return currentEmotes;
@@ -60,10 +61,24 @@ function getCurrentTwitchEmotes() {
       25
     );
 
-    currentEmotes = node.stateNode.props.emoteSetsData;
+    currentEmotes = node.stateNode.props.emoteSetsData.emoteMap ?
+      node.stateNode.props.emoteSetsData.emoteMap :
+      {};
+
+    Object.keys(currentEmotes).forEach((key) => {
+      const emote = currentEmotes[key]
+
+      emotes[emote.token] = {
+        id: emote.id,
+        provider: "twitch",
+        code: emote.token,
+        type: emote.type,
+        url: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`
+      }
+    })
   } catch (_) {}
 
-  return currentEmotes;
+  return emotes
 }
 
 function searchReactParents(node, predicate, maxDepth = 15, depth = 0) {

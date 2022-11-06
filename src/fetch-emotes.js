@@ -1,3 +1,5 @@
+import { getCurrentTwitchEmotes, getCurrentChannelInformation } from "./twitch"
+
 async function getBetterttvGlobalEmotes() {
   // https://github.com/night/betterttv/blob/7.4.40/src/modules/emotes/global-emotes.js#L26
   const res = await fetch("https://api.betterttv.net/3/cached/emotes/global")
@@ -20,9 +22,21 @@ async function getBetterttvEmotes(userId) {
   const global = await getBetterttvGlobalEmotes()
   const channel = await getBetterttvCurrentChannelEmotes(userId)
 
-  return []
-    .concat(global)
+  const emotes = {}
+
+  global
     .concat(channel)
+    .forEach((emote) => {
+      emotes[emote.code] = {
+        id: emote.id,
+        provider: "betterttv",
+        code: emote.code,
+        type: emote.imageType,
+        url: `https://cdn.betterttv.net/emote/${emote.id}/1x`
+      }
+    })
+
+  return emotes
 }
 
 async function getFrankerfacezGlobalEmotes() {
@@ -45,9 +59,47 @@ async function getFrankerfacezEmotes(userId) {
   const global = await getFrankerfacezGlobalEmotes()
   const channel = await getFrankerfacezCurrentChannelEmotes(userId)
 
-  return []
-    .concat(global)
+  const emotes = {}
+
+  global
     .concat(channel)
+    .forEach((emote) => {
+      emotes[emote.code] = {
+        id: emote.id,
+        provider: "frankerfacez",
+        code: emote.code,
+        type: emote.imageType,
+        url: `https://cdn.betterttv.net/frankerfacez_emote/${emote.id}/1`
+      }
+    })
+
+  return emotes
 }
 
-export { getBetterttvEmotes, getFrankerfacezEmotes }
+async function getAllEmotes() {
+  const { channelID } = getCurrentChannelInformation()
+
+  let emotes = {}
+
+  const twitch = getCurrentTwitchEmotes()
+
+  emotes = {
+    ...twitch
+  }
+
+  // https://github.com/night/betterttv/blob/7.4.40/src/index.js#L29
+  if (window.BetterTTV || window.__betterttv) {
+    const betterttv = await getBetterttvEmotes(channelID)
+    const frankerfacez = await getFrankerfacezEmotes(channelID)
+
+    emotes = {
+      ...emotes,
+      ...betterttv,
+      ...frankerfacez
+    }
+  }
+
+  return emotes
+}
+
+export { getBetterttvEmotes, getFrankerfacezEmotes, getAllEmotes }
