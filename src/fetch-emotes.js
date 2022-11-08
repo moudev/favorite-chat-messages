@@ -1,5 +1,5 @@
 import { getCurrentTwitchEmotes, getCurrentChannelInformation } from "./twitch"
-import toolkikEmojis from "./emoji-toolkit-emojis"
+import toolkikEmojis from "./data/emoji-toolkit-emojis"
 
 async function getBetterttvGlobalEmotes() {
   // https://github.com/night/betterttv/blob/7.4.40/src/modules/emotes/global-emotes.js#L26
