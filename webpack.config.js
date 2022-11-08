@@ -12,7 +12,7 @@ module.exports = {
   },
   entry: {
     "one-click-twitch-message": [
-      './src/one-click-twitch-message.js',
+      './src/index.js',
     ],
   },
   output: {
