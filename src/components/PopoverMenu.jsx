@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { CustomProvider, Popover, Button, Input, Loader } from 'rsuite';
+import { CustomProvider, Popover, Button, Input, Loader, Checkbox } from 'rsuite';
 import parse from "html-react-parser";
 
 import { MessageItem } from "./MessageItem.jsx"
@@ -46,7 +46,7 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
   )
 }
 
-const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes }) => {
+const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage }) => {
   const messages = getMessages()
 
   const transformMessage = (message) => {
@@ -92,6 +92,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes }) => {
             toggleWhisper={toggleWhisper}
             index={index}
             convertedMessageToJSX={parse(transformMessage(message.text))}
+            closeMenuAfterSendMessage={closeMenuAfterSendMessage}
           />
         ))
       }
@@ -102,6 +103,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes }) => {
 const PopoverMenu = React.forwardRef((props, ref) => {
   const [emotes, setEmotes] = useState({})
   const [loadingEmotes, setLoadingEmotes] = useState(true)
+  const [closeMenuAfterSendMessage, setCloseMenuAfterSendMessage] = useState(true)
 
   useEffect(() => {
     const fetchEmotes = async () => {
@@ -120,10 +122,19 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         style={{ width: '300px', backgroundColor: '#292d33' }}
       >
         <PopoverMenuHeader toggleWhisper={props.toggleWhisper} />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0rem' }}>
+          <Checkbox
+            checked={closeMenuAfterSendMessage}
+            onChange={() => setCloseMenuAfterSendMessage(!closeMenuAfterSendMessage)}
+          >
+            Close menu after send a message
+          </Checkbox>
+        </div>
         <PopoverMenuBody
           toggleWhisper={props.toggleWhisper}
           emotes={emotes}
           loadingEmotes={loadingEmotes}
+          closeMenuAfterSendMessage={closeMenuAfterSendMessage}
         />
       </Popover>
     </CustomProvider>

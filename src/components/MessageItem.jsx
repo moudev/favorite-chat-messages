@@ -4,13 +4,15 @@ import { sendTwitchMessage } from '../twitch.js'
 
 import { copyMessage, deleteMessage, editMessage } from '../messages.js'
 
-const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX }) => {
+const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage }) => {
   const [editMode, setEditMode] = useState(false)
   const [localMessageText, setLocalMessageText] = useState(message)
 
   const sendMessage = (text) => {
     sendTwitchMessage(text)
-    toggleWhisper()
+    if (closeMenuAfterSendMessage) {
+      toggleWhisper()
+    }
   }
 
   const deleteMessageByIndex = () => {
