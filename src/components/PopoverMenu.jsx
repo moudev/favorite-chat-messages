@@ -1,8 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { CustomProvider, Popover, Button, Input } from 'rsuite';
+import parse from "html-react-parser";
 
 import { MessageItem } from "./MessageItem.jsx"
 import { getMessages, saveMessage } from "../messages.js";
+import { getAllEmotes } from "../fetch-emotes.js";
+import { renderEmoji } from "../utils.js";
 
 const PopoverMenuHeader = ({ toggleWhisper }) => {
   const [message, setMessage] = useState("")
@@ -43,8 +46,30 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
   )
 }
 
-const PopoverMenuBody = ({ toggleWhisper }) => {
+const PopoverMenuBody = ({ toggleWhisper, emotes }) => {
   const messages = getMessages()
+
+  const transformMessage = (message) => {
+    const chunks = message.split(/\s|\n/gm)
+
+    const transformedRawTextChunks = chunks.map((chunk) => {
+      const emote = emotes[chunk.trim()]
+
+      if (emote) {
+        if (emote.provider === "emoji-toolkit") {
+          return renderEmoji(emote.url)
+        }
+
+        return `<img alt='${emote.code}' src='${emote.url}'  />`
+      }
+      return chunk
+    })
+
+    const rawText = transformedRawTextChunks.join(" ")
+
+    return rawText
+  }
+
   return (
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {
@@ -58,6 +83,7 @@ const PopoverMenuBody = ({ toggleWhisper }) => {
             key={`${message.text}-${index}`}
             toggleWhisper={toggleWhisper}
             index={index}
+            convertedMessageToJSX={parse(transformMessage(message.text))}
           />
         ))
       }
@@ -66,6 +92,16 @@ const PopoverMenuBody = ({ toggleWhisper }) => {
 }
 
 const PopoverMenu = React.forwardRef((props, ref) => {
+  const [emotes, setEmotes] = useState({})
+
+  useEffect(() => {
+    const fetchEmotes = async () => {
+      const emotesResponse = await getAllEmotes()
+      setEmotes(emotesResponse);
+    };
+    fetchEmotes();
+  }, []);
+
   return (
     <CustomProvider theme="dark">
       <Popover
@@ -74,7 +110,10 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         style={{ width: '300px', backgroundColor: '#292d33' }}
       >
         <PopoverMenuHeader toggleWhisper={props.toggleWhisper} />
-        <PopoverMenuBody toggleWhisper={props.toggleWhisper} />
+        <PopoverMenuBody
+          toggleWhisper={props.toggleWhisper}
+          emotes={emotes}
+        />
       </Popover>
     </CustomProvider>
   )

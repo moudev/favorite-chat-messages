@@ -3,9 +3,8 @@ import { Whisper, Button } from 'rsuite';
 
 import { PopoverMenu } from "./PopoverMenu.jsx";
 
-import { getAllEmotes } from "../fetch-emotes";
-
 const PickerButton = () => {
+  // https://github.com/night/betterttv/blob/7.4.40/src/modules/emote_menu/components/LegacyButton.jsx#L18
   const [whisperOpen, setWhisperOpen] = useState(false)
   const whisperRef = useRef(null)
 
@@ -16,7 +15,6 @@ const PickerButton = () => {
     [whisperOpen, whisperRef,]
   )
 
-  console.log("emotes", getAllEmotes())
   return (
     <Whisper
       placement="topEnd"

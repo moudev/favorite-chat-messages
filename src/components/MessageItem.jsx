@@ -4,7 +4,7 @@ import { sendTwitchMessage } from '../twitch.js'
 
 import { copyMessage, deleteMessage, editMessage } from '../messages.js'
 
-const MessageItem = ({ message, toggleWhisper, index }) => {
+const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX }) => {
   const [editMode, setEditMode] = useState(false)
   const [localMessageText, setLocalMessageText] = useState(message)
 
@@ -36,7 +36,7 @@ const MessageItem = ({ message, toggleWhisper, index }) => {
               onChange={(e) => setLocalMessageText(e)}
               value={localMessageText}
             /> :
-            <p style={{wordBreak: 'break-all'}}>{ message ? message : "Error" }</p>
+            <p style={{wordBreak: 'break-all'}}>{ message ? convertedMessageToJSX : "Error" }</p>
           }
         </div>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
