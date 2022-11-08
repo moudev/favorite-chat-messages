@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { CustomProvider, Popover, Button, Input } from 'rsuite';
+import { CustomProvider, Popover, Button, Input, Loader } from 'rsuite';
 import parse from "html-react-parser";
 
 import { MessageItem } from "./MessageItem.jsx"
@@ -46,7 +46,7 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
   )
 }
 
-const PopoverMenuBody = ({ toggleWhisper, emotes }) => {
+const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes }) => {
   const messages = getMessages()
 
   const transformMessage = (message) => {
@@ -73,11 +73,19 @@ const PopoverMenuBody = ({ toggleWhisper, emotes }) => {
   return (
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {
+        loadingEmotes && (
+          <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center', padding: '3rem'}}>
+            <Loader size="md"  content="loading..." vertical />
+          </div>
+        )
+      }
+
+      {
         (!messages || messages.length === 0) && <p>No saved messages</p>
       }
 
       {
-        messages.map((message, index) => (
+        !loadingEmotes && messages.map((message, index) => (
           <MessageItem
             message={message.text}
             key={`${message.text}-${index}`}
@@ -93,11 +101,13 @@ const PopoverMenuBody = ({ toggleWhisper, emotes }) => {
 
 const PopoverMenu = React.forwardRef((props, ref) => {
   const [emotes, setEmotes] = useState({})
+  const [loadingEmotes, setLoadingEmotes] = useState(true)
 
   useEffect(() => {
     const fetchEmotes = async () => {
       const emotesResponse = await getAllEmotes()
       setEmotes(emotesResponse);
+      setLoadingEmotes(false)
     };
     fetchEmotes();
   }, []);
@@ -113,6 +123,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         <PopoverMenuBody
           toggleWhisper={props.toggleWhisper}
           emotes={emotes}
+          loadingEmotes={loadingEmotes}
         />
       </Popover>
     </CustomProvider>
