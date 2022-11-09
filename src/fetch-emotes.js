@@ -28,12 +28,14 @@ async function getBetterttvEmotes(userId) {
   global
     .concat(channel)
     .forEach((emote) => {
-      emotes[emote.code] = {
-        id: emote.id,
-        provider: "betterttv",
-        code: emote.code,
-        type: emote.imageType,
-        url: `https://cdn.betterttv.net/emote/${emote.id}/1x`
+      if (emote) {
+        emotes[emote.code] = {
+          id: emote.id,
+          provider: "betterttv",
+          code: emote.code,
+          type: emote.imageType,
+          url: `https://cdn.betterttv.net/emote/${emote.id}/1x`
+        }
       }
     })
 
@@ -65,12 +67,14 @@ async function getFrankerfacezEmotes(userId) {
   global
     .concat(channel)
     .forEach((emote) => {
-      emotes[emote.code] = {
-        id: emote.id,
-        provider: "frankerfacez",
-        code: emote.code,
-        type: emote.imageType,
-        url: `https://cdn.betterttv.net/frankerfacez_emote/${emote.id}/1`
+      if (emote) {
+        emotes[emote.code] = {
+          id: emote.id,
+          provider: "frankerfacez",
+          code: emote.code,
+          type: emote.imageType,
+          url: `https://cdn.betterttv.net/frankerfacez_emote/${emote.id}/1`
+        }
       }
     })
 
