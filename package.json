@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build:firefox": "web-ext build --source-dir ./src --artifacts-dir ./plugin-build --overwrite-dest",
-    "build": "webpack build --mode production",
+    "build": "webpack build --mode production && cp webpack-build/* src/build/",
     "dev": "webpack serve --mode development"
   },
   "devDependencies": {

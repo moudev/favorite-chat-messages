@@ -11,5 +11,22 @@
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
     "48": "icons/icon-48.png"
-  }
+  },
+  "web_accessible_resources": [
+    "build/one-click-twitch-message.js",
+    "build/one-click-twitch-message.css"
+  ],
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": ["run.js"],
+      "matches": ["*://*.twitch.tv/*"],
+      "exclude_matches": [
+        "*://*.twitch.tv/*.html",
+        "*://*.twitch.tv/*.html?*",
+        "*://*.twitch.tv/*.htm",
+        "*://*.twitch.tv/*.htm?*"
+      ]
+    }
+  ]
 }
