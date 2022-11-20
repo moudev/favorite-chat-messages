@@ -35,4 +35,8 @@ function copyMessage(messageText) {
   navigator.clipboard.writeText(messageText)
 }
 
-export { getMessages, saveMessage, editMessage, deleteMessage, copyMessage }
+function updateMessageList(messages) {
+  manageLocalStorage("set", messages)
+}
+
+export { getMessages, saveMessage, editMessage, deleteMessage, copyMessage, updateMessageList }

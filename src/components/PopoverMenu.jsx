@@ -3,7 +3,7 @@ import { CustomProvider, Popover, Button, Input, Loader, Checkbox } from 'rsuite
 import parse from "html-react-parser";
 
 import { MessageItem } from "./MessageItem.jsx"
-import { getMessages, saveMessage } from "../messages.js";
+import { getMessages, saveMessage, updateMessageList } from "../messages.js";
 import { getAllEmotes } from "../fetch-emotes.js";
 import { renderEmoji } from "../utils.js";
 
@@ -47,7 +47,12 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
 }
 
 const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage }) => {
-  const messages = getMessages()
+  const [messages, setMessages] = useState([]);
+  const [position, setPosition] = useState({ start: 0, end: 0 });
+
+  useEffect(() => {
+    setMessages(getMessages());
+  }, []);
 
   const transformMessage = (message) => {
     const chunks = message.split(/\s|\n/gm)
@@ -69,6 +74,26 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
 
     return rawText
   }
+
+  const handleDragStart = (e) => {
+    setPosition({ ...position, start: e });
+  };
+
+  const handleDragEnter = (e) => {
+    setPosition({ ...position, end: e });
+  };
+
+  const handleDragEnd = (e) => {
+    const tmpMessages = messages;
+
+    const taskToAdd = tmpMessages.splice(position.start, 1)[0];
+    tmpMessages.splice(position.end, 0, taskToAdd);
+
+    setMessages(tmpMessages);
+    setPosition({ start: 0, end: 0 });
+
+    updateMessageList(messages);
+  };
 
   return (
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -93,6 +118,10 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
             index={index}
             convertedMessageToJSX={parse(transformMessage(message.text))}
             closeMenuAfterSendMessage={closeMenuAfterSendMessage}
+            draggable
+            onDragStart={() => handleDragStart(index)}
+            onDragEnd={() => handleDragEnd(index)}
+            onDragEnter={() => handleDragEnter(index)}
           />
         ))
       }

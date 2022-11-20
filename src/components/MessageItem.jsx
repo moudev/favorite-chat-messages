@@ -4,7 +4,7 @@ import { sendTwitchMessage } from '../twitch.js'
 
 import { copyMessage, deleteMessage, editMessage } from '../messages.js'
 
-const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage }) => {
+const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage, ...props }) => {
   const [editMode, setEditMode] = useState(false)
   const [localMessageText, setLocalMessageText] = useState(message)
 
@@ -26,7 +26,7 @@ const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, clo
   }
 
   return (
-    <div style={{ display: 'flex', border: '1px solid #3c3f43', borderRadius: '6px', gap: '1rem', padding: '1rem' }}>
+    <div style={{ display: 'flex', border: '1px solid #3c3f43', borderRadius: '6px', gap: '1rem', padding: '1rem' }} {...props}>
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', flex: '3' }}>
         <div>
           {
