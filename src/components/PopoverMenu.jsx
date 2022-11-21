@@ -116,7 +116,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
   }
 
   return (
-    <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'thin' }}>
       {
         loadingEmotes && (
           <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center', padding: '3rem'}}>
