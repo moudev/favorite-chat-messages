@@ -3,7 +3,7 @@ import { CustomProvider, Popover, Button, Input, Loader, Checkbox } from 'rsuite
 import parse from "html-react-parser";
 
 import { MessageItem } from "./MessageItem.jsx"
-import { getMessages, saveMessage, updateMessageList, removeMessage, deleteMessage } from "../messages.js";
+import { getMessages, saveMessage, updateMessageList, editMessage, deleteMessage } from "../messages.js";
 import { getAllEmotes } from "../fetch-emotes.js";
 import { renderEmoji } from "../utils.js";
 
@@ -124,6 +124,14 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
     deleteMessage(index)
   }
 
+  const updateMessage = (index, text) => {
+    const tmpMessages = messages;
+    tmpMessages[index].text = text
+
+    setMessages([...messages]) // was not updated for the splice behavior
+    editMessage(index, text)
+  }
+
   return (
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'thin' }}>
       {
@@ -153,6 +161,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
             onDragEnter={() => handleDragEnter(index)}
             moveMessage={moveMessage}
             removeMessage={removeMessage}
+            updateMessage={updateMessage}
           />
         ))
       }
