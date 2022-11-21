@@ -95,6 +95,26 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
     updateMessageList(messages);
   };
 
+  const moveMessage = (actualPosition, positions) => {
+    const lastItemIndex = messages.length - 1
+
+    if (
+      (actualPosition === 0 && positions <= -1) ||
+      (actualPosition === lastItemIndex && positions >= 1)
+    ) {
+      return
+    }
+
+    const tmpMessages = messages;
+    const taskToAdd = tmpMessages.splice(actualPosition, 1)[0];
+
+    tmpMessages.splice((actualPosition + positions), 0, taskToAdd);
+
+    setMessages([...tmpMessages]) // was not updated for the splice behavior
+
+    updateMessageList(messages)
+  }
+
   return (
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {
@@ -122,6 +142,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
             onDragStart={() => handleDragStart(index)}
             onDragEnd={() => handleDragEnd(index)}
             onDragEnter={() => handleDragEnter(index)}
+            moveMessage={moveMessage}
           />
         ))
       }
@@ -148,7 +169,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       <Popover
         {...props}
         ref={ref}
-        style={{ width: '300px', backgroundColor: '#292d33' }}
+        style={{ width: '350px', backgroundColor: '#292d33' }}
       >
         <PopoverMenuHeader toggleWhisper={props.toggleWhisper} />
         <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0rem' }}>
