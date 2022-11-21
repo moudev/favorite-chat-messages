@@ -7,7 +7,7 @@ import DragableIcon from '@rsuite/icons/Dragable';
 import { sendTwitchMessage } from '../twitch.js'
 import { copyMessage, deleteMessage, editMessage } from '../messages.js'
 
-const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage, moveMessage, ...props }) => {
+const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage, moveMessage, removeMessage, ...props }) => {
   const [editMode, setEditMode] = useState(false)
   const [localMessageText, setLocalMessageText] = useState(message)
 
@@ -16,11 +16,6 @@ const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, clo
     if (closeMenuAfterSendMessage) {
       toggleWhisper()
     }
-  }
-
-  const deleteMessageByIndex = () => {
-    deleteMessage(index)
-    toggleWhisper()
   }
 
   const edit = () => {
@@ -56,7 +51,7 @@ const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, clo
           >
             {editMode ? "Guardar" : "Editar"}
             </Button>
-          <Button disabled={editMode} size='xs' onClick={() => deleteMessageByIndex()}>Borrar</Button>
+          <Button disabled={editMode} size='xs' onClick={() => removeMessage(index)}>Borrar</Button>
           <Button size='xs' onClick={() => copyMessage(message)}>Copiar</Button>
         </div>
       </div>
