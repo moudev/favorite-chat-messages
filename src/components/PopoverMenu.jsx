@@ -38,7 +38,7 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
       <div
         style={{ display: 'flex', alignItems: 'center' }}
       >
-        <Button style={{ flex: "1"}} onClick={() => save()}>
+        <Button style={{ flex: "1"}} onClick={() => save()} disabled={!message}>
           Guardar
         </Button>
       </div>
