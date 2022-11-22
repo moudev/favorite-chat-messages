@@ -1,287 +1,287 @@
 // https://github.com/night/betterttv/blob/7.4.40/src/utils/safe-event-emitter.js
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events'
 
-function newListener(listener, ...args) {
+function newListener (listener, ...args) {
   try {
-    listener(...args);
+    listener(...args)
   } catch (e) {
-    console.log('Failed executing listener callback', e.stack);
+    console.log('Failed executing listener callback', e.stack)
   }
 }
 
 class SafeEventEmitter extends EventEmitter {
-  constructor() {
-    super();
+  constructor () {
+    super()
 
-    this.setMaxListeners(100);
+    this.setMaxListeners(100)
   }
 
-  on(type, listener) {
-    const callback = newListener.bind(this, listener);
-    super.on(type, callback);
-    return () => super.off(type, callback);
+  on (type, listener) {
+    const callback = newListener.bind(this, listener)
+    super.on(type, callback)
+    return () => super.off(type, callback)
   }
 
-  once(type, listener) {
-    const callback = newListener.bind(this, listener);
-    super.once(type, callback);
-    return () => super.off(type, callback);
+  once (type, listener) {
+    const callback = newListener.bind(this, listener)
+    super.once(type, callback)
+    return () => super.off(type, callback)
   }
 
-  off() {
-    throw new Error('.off cannot be called directly. you must use the returned cleanup function from .on/.once');
+  off () {
+    throw new Error('.off cannot be called directly. you must use the returned cleanup function from .on/.once')
   }
 }
 
 // https://github.com/night/betterttv/blob/7.4.40/src/observers/dom.js
-const IGNORED_HTML_TAGS = new Set(['BR', 'HEAD', 'LINK', 'META', 'SCRIPT', 'STYLE']);
+const IGNORED_HTML_TAGS = new Set(['BR', 'HEAD', 'LINK', 'META', 'SCRIPT', 'STYLE'])
 
-let observer;
-const observedIds = Object.create(null);
-const observedClassNames = Object.create(null);
-const observedTestSelectors = Object.create(null);
-const attributeObservers = new Map();
+let observer
+const observedIds = Object.create(null)
+const observedClassNames = Object.create(null)
+const observedTestSelectors = Object.create(null)
+const attributeObservers = new Map()
 
-function parseSelector(selector) {
-  const partialSelectors = selector.split(',').map((s) => s.trim());
-  const ids = [];
-  const classNames = [];
-  const testSelectors = [];
+function parseSelector (selector) {
+  const partialSelectors = selector.split(',').map((s) => s.trim())
+  const ids = []
+  const classNames = []
+  const testSelectors = []
   for (const partialSelector of partialSelectors) {
     if (partialSelector.startsWith('#')) {
       ids.push({
         key: partialSelector.split(' ')[0].split('#')[1],
-        partialSelector,
-      });
+        partialSelector
+      })
     } else if (partialSelector.startsWith('.')) {
       classNames.push({
         key: partialSelector.split(' ')[0].split('.')[1],
-        partialSelector,
-      });
+        partialSelector
+      })
     } else if (partialSelector.includes('[data-test-selector')) {
       testSelectors.push({
         key: partialSelector.split(' ')[0].split('[data-test-selector="')[1].split('"]')[0],
-        partialSelector,
-      });
+        partialSelector
+      })
     }
   }
   return {
     ids,
     classNames,
-    testSelectors,
-  };
+    testSelectors
+  }
 }
 
-function startAttributeObserver(observedType, emitter, node) {
+function startAttributeObserver (observedType, emitter, node) {
   const attributeObserver = new window.MutationObserver(() =>
     emitter.emit(observedType.selector, node, node.isConnected)
-  );
-  attributeObserver.observe(node, {attributes: true, subtree: true});
-  attributeObservers.set(observedType, attributeObserver);
+  )
+  attributeObserver.observe(node, { attributes: true, subtree: true })
+  attributeObservers.set(observedType, attributeObserver)
 }
 
-function stopAttributeObserver(observedType) {
-  const attributeObserver = attributeObservers.get(observedType);
+function stopAttributeObserver (observedType) {
+  const attributeObserver = attributeObservers.get(observedType)
   if (!attributeObserver) {
-    return;
+    return
   }
 
-  attributeObserver.disconnect();
-  attributeObservers.delete(observedType);
+  attributeObserver.disconnect()
+  attributeObservers.delete(observedType)
 }
 
-function processObservedResults(emitter, target, node, results) {
+function processObservedResults (emitter, target, node, results) {
   if (!results || results.length === 0) {
-    return;
+    return
   }
 
   for (const observedType of results) {
-    const {partialSelector, selector, options} = observedType;
-    let foundNode = partialSelector.includes(' ') ? node.querySelector(selector) : node;
+    const { partialSelector, selector, options } = observedType
+    let foundNode = partialSelector.includes(' ') ? node.querySelector(selector) : node
     if (!foundNode) {
-      continue;
+      continue
     }
     if (options && options.useParentNode) {
-      foundNode = node;
+      foundNode = node
     }
     if (options && options.useTargetNode) {
-      foundNode = target;
+      foundNode = target
     }
-    const {isConnected} = foundNode;
+    const { isConnected } = foundNode
     if (options && options.attributes) {
       if (isConnected) {
-        startAttributeObserver(observedType, emitter, foundNode);
+        startAttributeObserver(observedType, emitter, foundNode)
       } else {
-        stopAttributeObserver(observedType);
+        stopAttributeObserver(observedType)
       }
     }
-    emitter.emit(selector, foundNode, isConnected);
+    emitter.emit(selector, foundNode, isConnected)
   }
 }
 
-function processMutations(emitter, nodes) {
+function processMutations (emitter, nodes) {
   if (!nodes || nodes.length === 0) {
-    return;
+    return
   }
 
   for (const [target, node] of nodes) {
-    let nodeId = node.id;
+    let nodeId = node.id
     if (typeof nodeId === 'string' && nodeId.length > 0) {
-      nodeId = nodeId.trim();
-      processObservedResults(emitter, target, node, observedIds[nodeId]);
+      nodeId = nodeId.trim()
+      processObservedResults(emitter, target, node, observedIds[nodeId])
     }
 
-    let testSelector = node.getAttribute('data-test-selector');
+    let testSelector = node.getAttribute('data-test-selector')
     if (typeof testSelector === 'string' && testSelector.length > 0) {
-      testSelector = testSelector.trim();
-      processObservedResults(emitter, target, node, observedTestSelectors[testSelector]);
+      testSelector = testSelector.trim()
+      processObservedResults(emitter, target, node, observedTestSelectors[testSelector])
     }
 
-    const nodeClassList = node.classList;
+    const nodeClassList = node.classList
     if (nodeClassList && nodeClassList.length > 0) {
       for (let className of nodeClassList) {
-        className = className.trim();
-        processObservedResults(emitter, target, node, observedClassNames[className]);
+        className = className.trim()
+        processObservedResults(emitter, target, node, observedClassNames[className])
       }
     }
   }
 }
 
 class DOMObserver extends SafeEventEmitter {
-  constructor() {
-    super();
+  constructor () {
+    super()
 
     observer = new window.MutationObserver((mutations) => {
-      const pendingNodes = [];
+      const pendingNodes = []
 
-      for (const {addedNodes, removedNodes, target} of mutations) {
+      for (const { addedNodes, removedNodes, target } of mutations) {
         if (!addedNodes || !removedNodes || (addedNodes.length === 0 && removedNodes.length === 0)) {
-          continue;
+          continue
         }
 
         for (let i = 0; i < 2; i++) {
-          const nodes = i === 0 ? addedNodes : removedNodes;
+          const nodes = i === 0 ? addedNodes : removedNodes
           for (const node of nodes) {
             if (node.nodeType !== Node.ELEMENT_NODE || IGNORED_HTML_TAGS.has(node.nodeName)) {
-              continue;
+              continue
             }
 
-            pendingNodes.push([target, node]);
+            pendingNodes.push([target, node])
             if (node.childElementCount === 0) {
-              continue;
+              continue
             }
 
             for (const childNode of node.querySelectorAll('[id],[class]')) {
-              pendingNodes.push([target, childNode]);
+              pendingNodes.push([target, childNode])
             }
           }
         }
       }
 
       if (pendingNodes.length === 0) {
-        return;
+        return
       }
 
-      processMutations(this, pendingNodes);
-    });
-    observer.observe(document, {childList: true, subtree: true});
+      processMutations(this, pendingNodes)
+    })
+    observer.observe(document, { childList: true, subtree: true })
   }
 
-  on(selector, callback, options) {
-    const parsedSelector = parseSelector(selector);
+  on (selector, callback, options) {
+    const parsedSelector = parseSelector(selector)
 
-    const initialNodes = [];
+    const initialNodes = []
     for (const selectorType of Object.keys(parsedSelector)) {
-      let observedSelectorType;
+      let observedSelectorType
       switch (selectorType) {
         case 'ids':
-          observedSelectorType = observedIds;
-          break;
+          observedSelectorType = observedIds
+          break
         case 'classNames':
-          observedSelectorType = observedClassNames;
-          break;
+          observedSelectorType = observedClassNames
+          break
         case 'testSelectors':
-          observedSelectorType = observedTestSelectors;
-          break;
+          observedSelectorType = observedTestSelectors
+          break
         default:
-          break;
+          break
       }
 
-      for (const {key, partialSelector} of parsedSelector[selectorType]) {
-        const currentObservedTypeSelectors = observedSelectorType[key];
-        const observedType = {partialSelector, selector, options};
+      for (const { key, partialSelector } of parsedSelector[selectorType]) {
+        const currentObservedTypeSelectors = observedSelectorType[key]
+        const observedType = { partialSelector, selector, options }
         if (!currentObservedTypeSelectors) {
-          observedSelectorType[key] = [observedType];
+          observedSelectorType[key] = [observedType]
         } else {
-          currentObservedTypeSelectors.push(observedType);
+          currentObservedTypeSelectors.push(observedType)
         }
 
         if (observedSelectorType === observedIds) {
-          initialNodes.push(...document.querySelectorAll(`#${key}`));
+          initialNodes.push(...document.querySelectorAll(`#${key}`))
         } else if (observedSelectorType === observedClassNames) {
-          initialNodes.push(...document.getElementsByClassName(key));
+          initialNodes.push(...document.getElementsByClassName(key))
         }
       }
     }
 
-    const result = super.on(selector, callback);
+    const result = super.on(selector, callback)
 
     // trigger dom mutations for existing elements for on page
     processMutations(
       this,
       initialNodes.map((node) => [node.parentElement, node])
-    );
+    )
 
-    return result;
+    return result
   }
 
   // Note: you cannot call this directly as this is behind SafeEventEmitter
   //       use the closure returned from `on` to remove the event listener if needed
-  off(selector, callback) {
-    this.removeListener(selector, callback);
+  off (selector, callback) {
+    this.removeListener(selector, callback)
 
     if (this.listenerCount(selector) > 0) {
-      return;
+      return
     }
 
-    const parsedSelector = parseSelector(selector);
+    const parsedSelector = parseSelector(selector)
 
     for (const selectorType of Object.keys(parsedSelector)) {
-      let observedSelectorType;
+      let observedSelectorType
       switch (selectorType) {
         case 'ids':
-          observedSelectorType = observedIds;
-          break;
+          observedSelectorType = observedIds
+          break
         case 'classNames':
-          observedSelectorType = observedClassNames;
-          break;
+          observedSelectorType = observedClassNames
+          break
         case 'testSelectors':
-          observedSelectorType = observedTestSelectors;
-          break;
+          observedSelectorType = observedTestSelectors
+          break
         default:
-          break;
+          break
       }
 
-      for (const {key} of parsedSelector[selectorType]) {
-        const currentObservedTypeSelectors = observedSelectorType[key];
+      for (const { key } of parsedSelector[selectorType]) {
+        const currentObservedTypeSelectors = observedSelectorType[key]
         if (!currentObservedTypeSelectors) {
-          continue;
+          continue
         }
         const observedTypeIndex = currentObservedTypeSelectors.findIndex(
           (observedType) => observedType.selector === selector
-        );
+        )
         if (observedTypeIndex === -1) {
-          continue;
+          continue
         }
-        const observedType = currentObservedTypeSelectors[observedTypeIndex];
-        stopAttributeObserver(observedType);
-        currentObservedTypeSelectors.splice(observedTypeIndex);
+        const observedType = currentObservedTypeSelectors[observedTypeIndex]
+        stopAttributeObserver(observedType)
+        currentObservedTypeSelectors.splice(observedTypeIndex)
         if (currentObservedTypeSelectors.length === 0) {
-          delete observedSelectorType[key];
+          delete observedSelectorType[key]
         }
       }
     }
   }
 }
 
-export default new DOMObserver();
+export default new DOMObserver()

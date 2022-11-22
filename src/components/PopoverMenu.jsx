@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react"
-import { CustomProvider, Popover, Button, Input, Loader, Checkbox } from 'rsuite';
-import parse from "html-react-parser";
+import React, { useState, useEffect } from 'react'
+import { CustomProvider, Popover, Button, Input, Loader, Checkbox } from 'rsuite'
+import parse from 'html-react-parser'
 
-import { MessageItem } from "./MessageItem.jsx"
-import { getMessages, saveMessage, updateMessageList, editMessage, deleteMessage } from "../messages.js";
-import { getAllEmotes } from "../fetch-emotes.js";
-import { renderEmoji } from "../utils.js";
+import { MessageItem } from './MessageItem.jsx'
+import { getMessages, saveMessage, updateMessageList, editMessage, deleteMessage } from '../messages.js'
+import { getAllEmotes } from '../fetch-emotes.js'
+import { renderEmoji } from '../utils.js'
 
 const PopoverMenuHeader = ({ toggleWhisper }) => {
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState('')
 
   const save = () => {
     if (!message) {
@@ -24,10 +24,10 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
     <div
       style={{
         display: 'flex',
-        gap: "0.5rem"
+        gap: '0.5rem'
       }}
     >
-      <div style={{ flex: '2', display: 'flex', flexDirection: "column" }}>
+      <div style={{ flex: '2', display: 'flex', flexDirection: 'column' }}>
         <Input
           as="textarea"
           rows={2}
@@ -38,7 +38,7 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
       <div
         style={{ display: 'flex', alignItems: 'center' }}
       >
-        <Button style={{ flex: "1"}} onClick={() => save()} disabled={!message}>
+        <Button style={{ flex: '1' }} onClick={() => save()} disabled={!message}>
           Guardar
         </Button>
       </div>
@@ -47,12 +47,12 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
 }
 
 const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage }) => {
-  const [messages, setMessages] = useState([]);
-  const [position, setPosition] = useState({ start: 0, end: 0 });
+  const [messages, setMessages] = useState([])
+  const [position, setPosition] = useState({ start: 0, end: 0 })
 
   useEffect(() => {
-    setMessages(getMessages());
-  }, []);
+    setMessages(getMessages())
+  }, [])
 
   const transformMessage = (message) => {
     const chunks = message.split(/\s|\n/gm)
@@ -61,7 +61,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
       const emote = emotes[chunk.trim()]
 
       if (emote) {
-        if (emote.provider === "emoji-toolkit") {
+        if (emote.provider === 'emoji-toolkit') {
           return renderEmoji(emote.url)
         }
 
@@ -70,30 +70,30 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
       return chunk
     })
 
-    const rawText = transformedRawTextChunks.join(" ")
+    const rawText = transformedRawTextChunks.join(' ')
 
     return rawText
   }
 
   const handleDragStart = (e) => {
-    setPosition({ ...position, start: e });
-  };
+    setPosition({ ...position, start: e })
+  }
 
   const handleDragEnter = (e) => {
-    setPosition({ ...position, end: e });
-  };
+    setPosition({ ...position, end: e })
+  }
 
   const handleDragEnd = (e) => {
-    const tmpMessages = messages;
+    const tmpMessages = messages
 
-    const taskToAdd = tmpMessages.splice(position.start, 1)[0];
-    tmpMessages.splice(position.end, 0, taskToAdd);
+    const taskToAdd = tmpMessages.splice(position.start, 1)[0]
+    tmpMessages.splice(position.end, 0, taskToAdd)
 
-    setMessages(tmpMessages);
-    setPosition({ start: 0, end: 0 });
+    setMessages(tmpMessages)
+    setPosition({ start: 0, end: 0 })
 
-    updateMessageList(messages);
-  };
+    updateMessageList(messages)
+  }
 
   const moveMessage = (actualPosition, positions) => {
     const lastItemIndex = messages.length - 1
@@ -105,10 +105,10 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
       return
     }
 
-    const tmpMessages = messages;
-    const taskToAdd = tmpMessages.splice(actualPosition, 1)[0];
+    const tmpMessages = messages
+    const taskToAdd = tmpMessages.splice(actualPosition, 1)[0]
 
-    tmpMessages.splice((actualPosition + positions), 0, taskToAdd);
+    tmpMessages.splice((actualPosition + positions), 0, taskToAdd)
 
     setMessages([...tmpMessages]) // was not updated for the splice behavior
 
@@ -116,16 +116,16 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
   }
 
   const removeMessage = (index) => {
-    const tmpMessages = messages;
-    tmpMessages.splice(index, 1)[0];
+    const tmpMessages = messages
+    tmpMessages.splice(index, 1)
 
-    setMessages([...messages]) // was not updated for the splice behavior
+    setMessages([...tmpMessages]) // was not updated for the splice behavior
 
     deleteMessage(index)
   }
 
   const updateMessage = (index, text) => {
-    const tmpMessages = messages;
+    const tmpMessages = messages
     tmpMessages[index].text = text
 
     setMessages([...messages]) // was not updated for the splice behavior
@@ -136,8 +136,8 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
     <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'thin' }}>
       {
         loadingEmotes && (
-          <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center', padding: '3rem'}}>
-            <Loader size="md"  content="loading..." vertical />
+          <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center', padding: '3rem' }}>
+            <Loader size="md" content="loading..." vertical />
           </div>
         )
       }
@@ -169,6 +169,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
   )
 }
 
+// eslint-disable-next-line react/display-name
 const PopoverMenu = React.forwardRef((props, ref) => {
   const [emotes, setEmotes] = useState({})
   const [loadingEmotes, setLoadingEmotes] = useState(true)
@@ -177,11 +178,11 @@ const PopoverMenu = React.forwardRef((props, ref) => {
   useEffect(() => {
     const fetchEmotes = async () => {
       const emotesResponse = await getAllEmotes()
-      setEmotes(emotesResponse);
+      setEmotes(emotesResponse)
       setLoadingEmotes(false)
-    };
-    fetchEmotes();
-  }, []);
+    }
+    fetchEmotes()
+  }, [])
 
   return (
     <CustomProvider theme="dark">

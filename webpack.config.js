@@ -1,28 +1,28 @@
 // copy of: https://github.com/night/betterttv/blob/7.4.40/webpack.config.js
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   devServer: {
     port: '5173',
     allowedHosts: ['127.0.0.1', '.twitch.tv'],
     static: {
-      directory: path.resolve('./webpack-build'),
-    },
+      directory: path.resolve('./webpack-build')
+    }
   },
   entry: {
-    "one-click-twitch-message": [
-      './src/index.js',
-    ],
+    'one-click-twitch-message': [
+      './src/index.js'
+    ]
   },
   output: {
     filename: '[name].js',
-    path: path.resolve('./webpack-build'),
-  },  
+    path: path.resolve('./webpack-build')
+  },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-    }),
+      filename: '[name].css'
+    })
   ],
   module: {
     rules: [
@@ -35,7 +35,7 @@ module.exports = {
           options: {
             presets: [
               ['@babel/preset-env', {
-                "targets": "defaults" 
+                targets: 'defaults'
               }],
               '@babel/preset-react'
             ]
@@ -47,7 +47,7 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
+            loader: 'css-loader'
           },
           {
             loader: 'postcss-loader',
@@ -56,22 +56,22 @@ module.exports = {
                 plugins: [
                   'postcss-hexrgba',
                   'autoprefixer',
-                  'precss',
-                ],
-              },
-            },
+                  'precss'
+                ]
+              }
+            }
           },
           {
             loader: 'less-loader',
             options: {
               lessOptions: {
                 javascriptEnabled: true,
-                modifyVars: {'@reset-import': false},
-              },
-            },
-          },
-        ],
-      },
+                modifyVars: { '@reset-import': false }
+              }
+            }
+          }
+        ]
+      }
     ]
   }
 }
