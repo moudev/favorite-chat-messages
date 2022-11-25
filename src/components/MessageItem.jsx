@@ -22,7 +22,7 @@ const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, clo
     <div style={{ display: 'flex', border: '1px solid #3c3f43', borderRadius: '6px', gap: '1rem', padding: '1rem' }} {...props}>
       <div style={{ display: 'flex', flexDirection: 'column', flex: '1', gap: '0.5rem', justifyContent: 'center' }}>
           <IconButton size='sm' icon={<ArrowUpLineIcon />} onClick={() => moveMessage(index, -1)} />
-          <IconButton size='sm' icon={<DragableIcon />} />
+          <IconButton size='sm' icon={<DragableIcon />} style={{ zIndex: '-1' }} />
           <IconButton size='sm' icon={<ArrowDownLineIcon />} onClick={() => moveMessage(index, 1)} />
         </div>
       <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', flex: '3', justifyContent: 'space-between' }}>
