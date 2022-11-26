@@ -6,13 +6,20 @@ import DragableIcon from '@rsuite/icons/Dragable'
 
 import { sendTwitchMessage } from '../twitch.js'
 import { copyMessage } from '../messages.js'
+import { addRandomTextAtTheEnd } from '../utils.js'
 
-const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage, moveMessage, removeMessage, updateMessage, ...props }) => {
+const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage, moveMessage, removeMessage, updateMessage, avoidUniqueChat, ...props }) => {
   const [editMode, setEditMode] = useState(false)
   const [localMessageText, setLocalMessageText] = useState(message)
 
   const sendMessage = (text) => {
-    sendTwitchMessage(text)
+    let msg = text
+    if (avoidUniqueChat) {
+      msg = addRandomTextAtTheEnd(msg)
+    }
+
+    sendTwitchMessage(msg)
+
     if (closeMenuAfterSendMessage) {
       toggleWhisper()
     }

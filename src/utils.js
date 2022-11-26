@@ -35,4 +35,12 @@ function renderEmoji (charCode) {
   return emoji
 }
 
-export { manageLocalStorage, renderEmoji }
+function addRandomTextAtTheEnd (message) {
+  const characters = ['.', '..', '...', ',', ',,', ',.', '.,']
+  const randomStartIndex = Math.floor(Math.random() * characters.length)
+  const randomEndIndex = Math.floor(Math.random() * characters.length)
+
+  return `${message} ${characters[randomStartIndex]}${characters[randomEndIndex]}`
+}
+
+export { manageLocalStorage, renderEmoji, addRandomTextAtTheEnd }

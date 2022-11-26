@@ -46,7 +46,7 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
   )
 }
 
-const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage }) => {
+const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage, avoidUniqueChat }) => {
   const [messages, setMessages] = useState([])
   const [position, setPosition] = useState({ start: 0, end: 0 })
 
@@ -155,6 +155,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
             index={index}
             convertedMessageToJSX={parse(transformMessage(message.text))}
             closeMenuAfterSendMessage={closeMenuAfterSendMessage}
+            avoidUniqueChat={avoidUniqueChat}
             draggable
             onDragStart={() => handleDragStart(index)}
             onDragEnd={() => handleDragEnd(index)}
@@ -174,6 +175,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
   const [emotes, setEmotes] = useState({})
   const [loadingEmotes, setLoadingEmotes] = useState(true)
   const [closeMenuAfterSendMessage, setCloseMenuAfterSendMessage] = useState(true)
+  const [avoidUniqueChat, setAvoidUniqueChat] = useState(false)
 
   useEffect(() => {
     const fetchEmotes = async () => {
@@ -192,12 +194,18 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         style={{ width: '350px', backgroundColor: '#292d33' }}
       >
         <PopoverMenuHeader toggleWhisper={props.toggleWhisper} />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0rem', alignItems: 'flex-end', flexDirection: 'column' }}>
           <Checkbox
             checked={closeMenuAfterSendMessage}
             onChange={() => setCloseMenuAfterSendMessage(!closeMenuAfterSendMessage)}
           >
             Close menu after send a message
+          </Checkbox>
+          <Checkbox
+            checked={avoidUniqueChat}
+            onChange={() => setAvoidUniqueChat(!avoidUniqueChat)}
+          >
+            Avoid unique chat
           </Checkbox>
         </div>
         <PopoverMenuBody
@@ -205,6 +213,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
           emotes={emotes}
           loadingEmotes={loadingEmotes}
           closeMenuAfterSendMessage={closeMenuAfterSendMessage}
+          avoidUniqueChat={avoidUniqueChat}
         />
       </Popover>
     </CustomProvider>
