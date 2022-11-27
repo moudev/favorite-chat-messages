@@ -5,21 +5,27 @@ import 'rsuite/styles/index.less'
 import { PickerButton } from './PickerButton.jsx'
 import domObserver from '../dom-observer.js'
 
-const CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR = '.chat-input div[data-test-selector="chat-input-buttons-container"]'
+const CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR =
+  '.chat-input div[data-test-selector="chat-input-buttons-container"]'
 
 class Menu {
-  constructor () {
-    domObserver.on(CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR, (node, isConnected) => {
-      if (!isConnected) {
-        return
-      }
+  constructor() {
+    domObserver.on(
+      CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR,
+      (node, isConnected) => {
+        if (!isConnected) {
+          return
+        }
 
-      this.load()
-    })
+        this.load()
+      }
+    )
   }
 
-  load () {
-    const container = document.querySelector(CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR)
+  load() {
+    const container = document.querySelector(
+      CHAT_SETTINGS_BUTTON_CONTAINER_SELECTOR
+    )
 
     if (container == null) {
       return
@@ -27,7 +33,10 @@ class Menu {
 
     const rightContainer = container.lastChild
     const buttonContainer = document.createElement('div')
-    buttonContainer.setAttribute('data-a-target', 'one-click-twitch-message-picker-button-container')
+    buttonContainer.setAttribute(
+      'data-a-target',
+      'one-click-twitch-message-picker-button-container'
+    )
     rightContainer.insertBefore(buttonContainer, rightContainer.lastChild)
 
     ReactDOM.render(<PickerButton />, buttonContainer)

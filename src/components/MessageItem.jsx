@@ -8,7 +8,18 @@ import { sendTwitchMessage } from '../twitch.js'
 import { copyMessage } from '../messages.js'
 import { addRandomTextAtTheEnd } from '../utils.js'
 
-const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, closeMenuAfterSendMessage, moveMessage, removeMessage, updateMessage, avoidUniqueChat, ...props }) => {
+const MessageItem = ({
+  message,
+  toggleWhisper,
+  index,
+  convertedMessageToJSX,
+  closeMenuAfterSendMessage,
+  moveMessage,
+  removeMessage,
+  updateMessage,
+  avoidUniqueChat,
+  ...props
+}) => {
   const [editMode, setEditMode] = useState(false)
   const [localMessageText, setLocalMessageText] = useState(message)
 
@@ -26,40 +37,93 @@ const MessageItem = ({ message, toggleWhisper, index, convertedMessageToJSX, clo
   }
 
   return (
-    <div style={{ display: 'flex', border: '1px solid #3c3f43', borderRadius: '6px', gap: '1rem', padding: '1rem' }} {...props}>
-      <div style={{ display: 'flex', flexDirection: 'column', flex: '1', gap: '0.5rem', justifyContent: 'center' }}>
-          <IconButton size='sm' icon={<ArrowUpLineIcon />} onClick={() => moveMessage(index, -1)} />
-          <IconButton size='sm' icon={<DragableIcon />} style={{ zIndex: '-1' }} />
-          <IconButton size='sm' icon={<ArrowDownLineIcon />} onClick={() => moveMessage(index, 1)} />
-        </div>
-      <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', flex: '3', justifyContent: 'space-between' }}>
+    <div
+      style={{
+        display: 'flex',
+        border: '1px solid #3c3f43',
+        borderRadius: '6px',
+        gap: '1rem',
+        padding: '1rem',
+      }}
+      {...props}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: '1',
+          gap: '0.5rem',
+          justifyContent: 'center',
+        }}
+      >
+        <IconButton
+          size="sm"
+          icon={<ArrowUpLineIcon />}
+          onClick={() => moveMessage(index, -1)}
+        />
+        <IconButton
+          size="sm"
+          icon={<DragableIcon />}
+          style={{ zIndex: '-1' }}
+        />
+        <IconButton
+          size="sm"
+          icon={<ArrowDownLineIcon />}
+          onClick={() => moveMessage(index, 1)}
+        />
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '1rem',
+          flexDirection: 'column',
+          flex: '3',
+          justifyContent: 'space-between',
+        }}
+      >
         <div>
-          {
-            editMode
-              ? <Input
+          {editMode ? (
+            <Input
               as="textarea"
               rows={4}
               placeholder="Message"
               onChange={(e) => setLocalMessageText(e)}
               value={localMessageText}
             />
-              : <p style={{ wordBreak: 'break-all' }}>{ message ? convertedMessageToJSX : 'Error' }</p>
-          }
+          ) : (
+            <p style={{ wordBreak: 'break-all' }}>
+              {message ? convertedMessageToJSX : 'Error'}
+            </p>
+          )}
         </div>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+        <div
+          style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}
+        >
           <Button
-          size='xs'
-          onClick={editMode ? () => updateMessage(index, localMessageText) : () => setEditMode(true)}
+            size="xs"
+            onClick={
+              editMode
+                ? () => updateMessage(index, localMessageText)
+                : () => setEditMode(true)
+            }
           >
             {editMode ? 'Guardar' : 'Editar'}
-            </Button>
-          <Button disabled={editMode} size='xs' onClick={() => removeMessage(index)}>Borrar</Button>
-          <Button size='xs' onClick={() => copyMessage(message)}>Copiar</Button>
+          </Button>
+          <Button
+            disabled={editMode}
+            size="xs"
+            onClick={() => removeMessage(index)}
+          >
+            Borrar
+          </Button>
+          <Button size="xs" onClick={() => copyMessage(message)}>
+            Copiar
+          </Button>
         </div>
       </div>
       <div style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
         <Button
-          size='sm'
+          size="sm"
           disabled={editMode}
           onClick={() => sendMessage(message)}
         >

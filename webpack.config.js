@@ -7,22 +7,20 @@ module.exports = {
     port: '5173',
     allowedHosts: ['127.0.0.1', '.twitch.tv'],
     static: {
-      directory: path.resolve('./webpack-build')
-    }
+      directory: path.resolve('./webpack-build'),
+    },
   },
   entry: {
-    'one-click-twitch-message': [
-      './src/index.js'
-    ]
+    'one-click-twitch-message': ['./src/index.js'],
   },
   output: {
     filename: '[name].js',
-    path: path.resolve('./webpack-build')
+    path: path.resolve('./webpack-build'),
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css'
-    })
+      filename: '[name].css',
+    }),
   ],
   module: {
     rules: [
@@ -30,48 +28,49 @@ module.exports = {
         test: /\.(jsx|js)$/,
         include: path.resolve(__dirname, 'src'),
         exclude: /node_modules/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env', {
-                targets: 'defaults'
-              }],
-              '@babel/preset-react'
-            ]
-          }
-        }]
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: 'defaults',
+                  },
+                ],
+                '@babel/preset-react',
+              ],
+            },
+          },
+        ],
       },
       {
         test: /(\.less|\.css)$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader'
+            loader: 'css-loader',
           },
           {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: [
-                  'postcss-hexrgba',
-                  'autoprefixer',
-                  'precss'
-                ]
-              }
-            }
+                plugins: ['postcss-hexrgba', 'autoprefixer', 'precss'],
+              },
+            },
           },
           {
             loader: 'less-loader',
             options: {
               lessOptions: {
                 javascriptEnabled: true,
-                modifyVars: { '@reset-import': false }
-              }
-            }
-          }
-        ]
-      }
-    ]
-  }
+                modifyVars: { '@reset-import': false },
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
 }

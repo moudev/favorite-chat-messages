@@ -1,7 +1,7 @@
 // https://github.com/night/betterttv/blob/7.4.40/src/utils/safe-event-emitter.js
 import { EventEmitter } from 'events'
 
-function newListener (listener, ...args) {
+function newListener(listener, ...args) {
   try {
     listener(...args)
   } catch (e) {
@@ -10,31 +10,40 @@ function newListener (listener, ...args) {
 }
 
 class SafeEventEmitter extends EventEmitter {
-  constructor () {
+  constructor() {
     super()
 
     this.setMaxListeners(100)
   }
 
-  on (type, listener) {
+  on(type, listener) {
     const callback = newListener.bind(this, listener)
     super.on(type, callback)
     return () => super.off(type, callback)
   }
 
-  once (type, listener) {
+  once(type, listener) {
     const callback = newListener.bind(this, listener)
     super.once(type, callback)
     return () => super.off(type, callback)
   }
 
-  off () {
-    throw new Error('.off cannot be called directly. you must use the returned cleanup function from .on/.once')
+  off() {
+    throw new Error(
+      '.off cannot be called directly. you must use the returned cleanup function from .on/.once'
+    )
   }
 }
 
 // https://github.com/night/betterttv/blob/7.4.40/src/observers/dom.js
-const IGNORED_HTML_TAGS = new Set(['BR', 'HEAD', 'LINK', 'META', 'SCRIPT', 'STYLE'])
+const IGNORED_HTML_TAGS = new Set([
+  'BR',
+  'HEAD',
+  'LINK',
+  'META',
+  'SCRIPT',
+  'STYLE',
+])
 
 let observer
 const observedIds = Object.create(null)
@@ -42,7 +51,7 @@ const observedClassNames = Object.create(null)
 const observedTestSelectors = Object.create(null)
 const attributeObservers = new Map()
 
-function parseSelector (selector) {
+function parseSelector(selector) {
   const partialSelectors = selector.split(',').map((s) => s.trim())
   const ids = []
   const classNames = []
@@ -51,28 +60,31 @@ function parseSelector (selector) {
     if (partialSelector.startsWith('#')) {
       ids.push({
         key: partialSelector.split(' ')[0].split('#')[1],
-        partialSelector
+        partialSelector,
       })
     } else if (partialSelector.startsWith('.')) {
       classNames.push({
         key: partialSelector.split(' ')[0].split('.')[1],
-        partialSelector
+        partialSelector,
       })
     } else if (partialSelector.includes('[data-test-selector')) {
       testSelectors.push({
-        key: partialSelector.split(' ')[0].split('[data-test-selector="')[1].split('"]')[0],
-        partialSelector
+        key: partialSelector
+          .split(' ')[0]
+          .split('[data-test-selector="')[1]
+          .split('"]')[0],
+        partialSelector,
       })
     }
   }
   return {
     ids,
     classNames,
-    testSelectors
+    testSelectors,
   }
 }
 
-function startAttributeObserver (observedType, emitter, node) {
+function startAttributeObserver(observedType, emitter, node) {
   const attributeObserver = new window.MutationObserver(() =>
     emitter.emit(observedType.selector, node, node.isConnected)
   )
@@ -80,7 +92,7 @@ function startAttributeObserver (observedType, emitter, node) {
   attributeObservers.set(observedType, attributeObserver)
 }
 
-function stopAttributeObserver (observedType) {
+function stopAttributeObserver(observedType) {
   const attributeObserver = attributeObservers.get(observedType)
   if (!attributeObserver) {
     return
@@ -90,14 +102,16 @@ function stopAttributeObserver (observedType) {
   attributeObservers.delete(observedType)
 }
 
-function processObservedResults (emitter, target, node, results) {
+function processObservedResults(emitter, target, node, results) {
   if (!results || results.length === 0) {
     return
   }
 
   for (const observedType of results) {
     const { partialSelector, selector, options } = observedType
-    let foundNode = partialSelector.includes(' ') ? node.querySelector(selector) : node
+    let foundNode = partialSelector.includes(' ')
+      ? node.querySelector(selector)
+      : node
     if (!foundNode) {
       continue
     }
@@ -119,7 +133,7 @@ function processObservedResults (emitter, target, node, results) {
   }
 }
 
-function processMutations (emitter, nodes) {
+function processMutations(emitter, nodes) {
   if (!nodes || nodes.length === 0) {
     return
   }
@@ -134,35 +148,52 @@ function processMutations (emitter, nodes) {
     let testSelector = node.getAttribute('data-test-selector')
     if (typeof testSelector === 'string' && testSelector.length > 0) {
       testSelector = testSelector.trim()
-      processObservedResults(emitter, target, node, observedTestSelectors[testSelector])
+      processObservedResults(
+        emitter,
+        target,
+        node,
+        observedTestSelectors[testSelector]
+      )
     }
 
     const nodeClassList = node.classList
     if (nodeClassList && nodeClassList.length > 0) {
       for (let className of nodeClassList) {
         className = className.trim()
-        processObservedResults(emitter, target, node, observedClassNames[className])
+        processObservedResults(
+          emitter,
+          target,
+          node,
+          observedClassNames[className]
+        )
       }
     }
   }
 }
 
 class DOMObserver extends SafeEventEmitter {
-  constructor () {
+  constructor() {
     super()
 
     observer = new window.MutationObserver((mutations) => {
       const pendingNodes = []
 
       for (const { addedNodes, removedNodes, target } of mutations) {
-        if (!addedNodes || !removedNodes || (addedNodes.length === 0 && removedNodes.length === 0)) {
+        if (
+          !addedNodes ||
+          !removedNodes ||
+          (addedNodes.length === 0 && removedNodes.length === 0)
+        ) {
           continue
         }
 
         for (let i = 0; i < 2; i++) {
           const nodes = i === 0 ? addedNodes : removedNodes
           for (const node of nodes) {
-            if (node.nodeType !== Node.ELEMENT_NODE || IGNORED_HTML_TAGS.has(node.nodeName)) {
+            if (
+              node.nodeType !== Node.ELEMENT_NODE ||
+              IGNORED_HTML_TAGS.has(node.nodeName)
+            ) {
               continue
             }
 
@@ -187,7 +218,7 @@ class DOMObserver extends SafeEventEmitter {
     observer.observe(document, { childList: true, subtree: true })
   }
 
-  on (selector, callback, options) {
+  on(selector, callback, options) {
     const parsedSelector = parseSelector(selector)
 
     const initialNodes = []
@@ -237,7 +268,7 @@ class DOMObserver extends SafeEventEmitter {
 
   // Note: you cannot call this directly as this is behind SafeEventEmitter
   //       use the closure returned from `on` to remove the event listener if needed
-  off (selector, callback) {
+  off(selector, callback) {
     this.removeListener(selector, callback)
 
     if (this.listenerCount(selector) > 0) {

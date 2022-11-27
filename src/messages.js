@@ -1,6 +1,6 @@
 import { manageLocalStorage } from './utils.js'
 
-function getMessages () {
+function getMessages() {
   const messages = manageLocalStorage('get')
   if (messages && messages.length > 0) {
     return messages
@@ -8,13 +8,13 @@ function getMessages () {
   return []
 }
 
-async function saveMessage (messageText) {
+async function saveMessage(messageText) {
   const messages = await getMessages()
   messages.unshift({ text: messageText })
   manageLocalStorage('set', messages)
 }
 
-async function editMessage (messageIndex, messageText) {
+async function editMessage(messageIndex, messageText) {
   const messages = await getMessages()
   if (messages[messageIndex]) {
     messages[messageIndex].text = messageText
@@ -22,7 +22,7 @@ async function editMessage (messageIndex, messageText) {
   }
 }
 
-async function deleteMessage (messageIndex) {
+async function deleteMessage(messageIndex) {
   const messages = await getMessages()
 
   if (messages[messageIndex]) {
@@ -31,12 +31,19 @@ async function deleteMessage (messageIndex) {
   }
 }
 
-function copyMessage (messageText) {
+function copyMessage(messageText) {
   navigator.clipboard.writeText(messageText)
 }
 
-function updateMessageList (messages) {
+function updateMessageList(messages) {
   manageLocalStorage('set', messages)
 }
 
-export { getMessages, saveMessage, editMessage, deleteMessage, copyMessage, updateMessageList }
+export {
+  getMessages,
+  saveMessage,
+  editMessage,
+  deleteMessage,
+  copyMessage,
+  updateMessageList,
+}

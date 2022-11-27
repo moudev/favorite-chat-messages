@@ -1,12 +1,13 @@
 // copy of: https://github.com/night/betterttv/blob/7.4.36/src/utils/twitch.js
 const querySelector = (selector) => document.querySelector(selector)
 
-const CHAT_CONTAINER = 'section[data-test-selector="chat-room-component-layout"]'
+const CHAT_CONTAINER =
+  'section[data-test-selector="chat-room-component-layout"]'
 
 // NOTE: only works when the input is a textarea. It works in firefox developer edition
 // It doesn't work because cannot find the react instance in the element.
 // It appears on the console but not when trying to access with the key.
-function getReactInstance (element) {
+function getReactInstance(element) {
   for (const key in element) {
     if (key.startsWith('__reactInternalInstance$')) {
       return element[key]
@@ -16,7 +17,7 @@ function getReactInstance (element) {
   return null
 }
 
-function getCurrentChat () {
+function getCurrentChat() {
   let currentChat
   try {
     const node = searchReactParents(
@@ -29,7 +30,7 @@ function getCurrentChat () {
   return currentChat
 }
 
-function getCurrentTwitchEmotes () {
+function getCurrentTwitchEmotes() {
   let currentEmotes
   const emotes = {}
 
@@ -56,7 +57,7 @@ function getCurrentTwitchEmotes () {
         provider: 'twitch',
         code: emote.token,
         type: emote.type,
-        url: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`
+        url: `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`,
       }
     })
   } catch (_) {}
@@ -64,7 +65,7 @@ function getCurrentTwitchEmotes () {
   return emotes
 }
 
-function searchReactParents (node, predicate, maxDepth = 15, depth = 0) {
+function searchReactParents(node, predicate, maxDepth = 15, depth = 0) {
   try {
     if (predicate(node)) {
       return node
@@ -93,7 +94,7 @@ const getCurrentChannelInformation = () => {
     channelLogin: props.channelLogin,
     currentUserID: props.userID,
     currentUserDisplayName: props.currentUserDisplayName,
-    currentUserLogin: props.currentUserLogin
+    currentUserLogin: props.currentUserLogin,
   }
 }
 
@@ -103,4 +104,8 @@ const sendTwitchMessage = (message = '') => {
   currentChat.props.onSendMessage(message)
 }
 
-export { sendTwitchMessage, getCurrentTwitchEmotes, getCurrentChannelInformation }
+export {
+  sendTwitchMessage,
+  getCurrentTwitchEmotes,
+  getCurrentChannelInformation,
+}

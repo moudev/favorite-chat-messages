@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { CustomProvider, Popover, Button, Input, Loader, Checkbox } from 'rsuite'
+import {
+  CustomProvider,
+  Popover,
+  Button,
+  Input,
+  Loader,
+  Checkbox,
+} from 'rsuite'
 import parse from 'html-react-parser'
 
 import { MessageItem } from './MessageItem.jsx'
-import { getMessages, saveMessage, updateMessageList, editMessage, deleteMessage } from '../messages.js'
+import {
+  getMessages,
+  saveMessage,
+  updateMessageList,
+  editMessage,
+  deleteMessage,
+} from '../messages.js'
 import { getAllEmotes } from '../fetch-emotes.js'
 import { renderEmoji } from '../utils.js'
 
@@ -25,7 +38,7 @@ const PopoverMenuHeader = ({ messages, setMessages }) => {
     <div
       style={{
         display: 'flex',
-        gap: '0.5rem'
+        gap: '0.5rem',
       }}
     >
       <div style={{ flex: '2', display: 'flex', flexDirection: 'column' }}>
@@ -36,10 +49,12 @@ const PopoverMenuHeader = ({ messages, setMessages }) => {
           onChange={(text) => setMessage(text)}
         />
       </div>
-      <div
-        style={{ display: 'flex', alignItems: 'center' }}
-      >
-        <Button style={{ flex: '1' }} onClick={() => save()} disabled={!message}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Button
+          style={{ flex: '1' }}
+          onClick={() => save()}
+          disabled={!message}
+        >
           Guardar
         </Button>
       </div>
@@ -47,7 +62,15 @@ const PopoverMenuHeader = ({ messages, setMessages }) => {
   )
 }
 
-const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage, avoidUniqueChat, messages, setMessages }) => {
+const PopoverMenuBody = ({
+  toggleWhisper,
+  emotes,
+  loadingEmotes,
+  closeMenuAfterSendMessage,
+  avoidUniqueChat,
+  messages,
+  setMessages,
+}) => {
   const [position, setPosition] = useState({ start: 0, end: 0 })
 
   useEffect(() => {
@@ -108,7 +131,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
     const tmpMessages = messages
     const taskToAdd = tmpMessages.splice(actualPosition, 1)[0]
 
-    tmpMessages.splice((actualPosition + positions), 0, taskToAdd)
+    tmpMessages.splice(actualPosition + positions, 0, taskToAdd)
 
     setMessages([...tmpMessages]) // was not updated for the splice behavior
 
@@ -133,21 +156,34 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
   }
 
   return (
-    <div style={{ height: '350px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'thin' }}>
-      {
-        loadingEmotes && (
-          <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center', padding: '3rem' }}>
-            <Loader size="md" content="loading..." vertical />
-          </div>
-        )
-      }
+    <div
+      style={{
+        height: '350px',
+        overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        scrollbarWidth: 'thin',
+      }}
+    >
+      {loadingEmotes && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            height: '100%',
+            alignItems: 'center',
+            padding: '3rem',
+          }}
+        >
+          <Loader size="md" content="loading..." vertical />
+        </div>
+      )}
 
-      {
-        (!messages || messages.length === 0) && <p>No saved messages</p>
-      }
+      {(!messages || messages.length === 0) && <p>No saved messages</p>}
 
-      {
-        !loadingEmotes && messages.map((message, index) => (
+      {!loadingEmotes &&
+        messages.map((message, index) => (
           <MessageItem
             message={message.text}
             key={`${message.text}-${index}`}
@@ -164,8 +200,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
             removeMessage={removeMessage}
             updateMessage={updateMessage}
           />
-        ))
-      }
+        ))}
     </div>
   )
 }
@@ -175,7 +210,8 @@ const PopoverMenu = React.forwardRef((props, ref) => {
   const [emotes, setEmotes] = useState({})
   const [messages, setMessages] = useState([])
   const [loadingEmotes, setLoadingEmotes] = useState(true)
-  const [closeMenuAfterSendMessage, setCloseMenuAfterSendMessage] = useState(true)
+  const [closeMenuAfterSendMessage, setCloseMenuAfterSendMessage] =
+    useState(true)
   const [avoidUniqueChat, setAvoidUniqueChat] = useState(false)
 
   useEffect(() => {
@@ -196,11 +232,25 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         ref={ref}
         style={{ width: '350px', backgroundColor: '#292d33' }}
       >
-        <PopoverMenuHeader toggleWhisper={props.toggleWhisper} messages={messages} setMessages={setMessages} />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0rem', alignItems: 'flex-end', flexDirection: 'column' }}>
+        <PopoverMenuHeader
+          toggleWhisper={props.toggleWhisper}
+          messages={messages}
+          setMessages={setMessages}
+        />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            margin: '1rem 0rem',
+            alignItems: 'flex-end',
+            flexDirection: 'column',
+          }}
+        >
           <Checkbox
             checked={closeMenuAfterSendMessage}
-            onChange={() => setCloseMenuAfterSendMessage(!closeMenuAfterSendMessage)}
+            onChange={() =>
+              setCloseMenuAfterSendMessage(!closeMenuAfterSendMessage)
+            }
           >
             Close menu after send a message
           </Checkbox>

@@ -1,6 +1,10 @@
 import twemoji from 'twemoji'
 
-function manageLocalStorage (action = 'get', data = null, key = 'twitch-messages') {
+function manageLocalStorage(
+  action = 'get',
+  data = null,
+  key = 'twitch-messages'
+) {
   if (action === 'get') {
     const result = localStorage.getItem(key)
     return JSON.parse(result || '[]')
@@ -9,7 +13,7 @@ function manageLocalStorage (action = 'get', data = null, key = 'twitch-messages
   }
 }
 
-function renderEmoji (charCode) {
+function renderEmoji(charCode) {
   // https://github.com/night/betterttv/blob/7.4.40/src/modules/emotes/emojis.js#L48
   const emoji = twemoji.parse(charCode, {
     folder: 'svg',
@@ -29,13 +33,13 @@ function renderEmoji (charCode) {
       }
 
       return false
-    }
+    },
   })
 
   return emoji
 }
 
-function addRandomTextAtTheEnd (message) {
+function addRandomTextAtTheEnd(message) {
   const characters = ['.', '..', '...', ',', ',,', ',.', '.,']
   const randomStartIndex = Math.floor(Math.random() * characters.length)
   const randomEndIndex = Math.floor(Math.random() * characters.length)

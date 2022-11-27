@@ -1,4 +1,4 @@
-(function oneClickTwitchMessage () {
+;(function oneClickTwitchMessage() {
   const script = document.createElement('script')
   script.type = 'text/javascript'
   script.src = browser.runtime.getURL('build/one-click-twitch-message.js')
