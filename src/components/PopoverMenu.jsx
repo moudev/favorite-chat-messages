@@ -7,7 +7,7 @@ import { getMessages, saveMessage, updateMessageList, editMessage, deleteMessage
 import { getAllEmotes } from '../fetch-emotes.js'
 import { renderEmoji } from '../utils.js'
 
-const PopoverMenuHeader = ({ toggleWhisper }) => {
+const PopoverMenuHeader = ({ messages, setMessages }) => {
   const [message, setMessage] = useState('')
 
   const save = () => {
@@ -16,8 +16,9 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
     }
 
     saveMessage(message)
+    console.log('message', message)
+    setMessages([{ text: message }, ...messages])
     setMessage('')
-    toggleWhisper()
   }
 
   return (
@@ -46,8 +47,7 @@ const PopoverMenuHeader = ({ toggleWhisper }) => {
   )
 }
 
-const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage, avoidUniqueChat }) => {
-  const [messages, setMessages] = useState([])
+const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterSendMessage, avoidUniqueChat, messages, setMessages }) => {
   const [position, setPosition] = useState({ start: 0, end: 0 })
 
   useEffect(() => {
@@ -173,6 +173,7 @@ const PopoverMenuBody = ({ toggleWhisper, emotes, loadingEmotes, closeMenuAfterS
 // eslint-disable-next-line react/display-name
 const PopoverMenu = React.forwardRef((props, ref) => {
   const [emotes, setEmotes] = useState({})
+  const [messages, setMessages] = useState([])
   const [loadingEmotes, setLoadingEmotes] = useState(true)
   const [closeMenuAfterSendMessage, setCloseMenuAfterSendMessage] = useState(true)
   const [avoidUniqueChat, setAvoidUniqueChat] = useState(false)
@@ -183,7 +184,9 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       setEmotes(emotesResponse)
       setLoadingEmotes(false)
     }
+
     fetchEmotes()
+    setMessages(getMessages())
   }, [])
 
   return (
@@ -193,7 +196,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
         ref={ref}
         style={{ width: '350px', backgroundColor: '#292d33' }}
       >
-        <PopoverMenuHeader toggleWhisper={props.toggleWhisper} />
+        <PopoverMenuHeader toggleWhisper={props.toggleWhisper} messages={messages} setMessages={setMessages} />
         <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0rem', alignItems: 'flex-end', flexDirection: 'column' }}>
           <Checkbox
             checked={closeMenuAfterSendMessage}
@@ -214,6 +217,8 @@ const PopoverMenu = React.forwardRef((props, ref) => {
           loadingEmotes={loadingEmotes}
           closeMenuAfterSendMessage={closeMenuAfterSendMessage}
           avoidUniqueChat={avoidUniqueChat}
+          messages={messages}
+          setMessages={setMessages}
         />
       </Popover>
     </CustomProvider>
