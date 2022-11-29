@@ -61,11 +61,14 @@ const MessageItem = ({
           icon={<ArrowUpLineIcon />}
           onClick={() => moveMessage(index, -1)}
         />
-        <IconButton
-          size="sm"
-          icon={<DragableIcon />}
-          style={{ zIndex: '-1' }}
-        />
+        <div style={{ cursor: 'pointer' }}>
+          <IconButton
+            size="sm"
+            icon={<DragableIcon />}
+            style={{ zIndex: '-1', width: '100%' }}
+          />
+        </div>
+
         <IconButton
           size="sm"
           icon={<ArrowDownLineIcon />}
@@ -121,7 +124,14 @@ const MessageItem = ({
           </Button>
         </div>
       </div>
-      <div style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
+      <div
+        style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
         <Button
           size="sm"
           disabled={editMode}
