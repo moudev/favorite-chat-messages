@@ -259,7 +259,8 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       editButton: 'Editar',
       deleteButton: 'Borrar',
       copyButton: 'Copiar',
-      closeModalAfterSendMessageCheckbox: 'Cerrar menú despues de enviar',
+      closeModalAfterSendMessageCheckbox:
+        'Cerrar menú despues de enviar mensaje',
       avoidUniqueChatCheckbox: 'Evitar chat único',
     },
   }
@@ -274,6 +275,14 @@ const PopoverMenu = React.forwardRef((props, ref) => {
 
     fetchEmotes()
     setMessages(getMessages())
+
+    const lang = localStorage.getItem('twitch-messages-lang')
+    if (lang) {
+      setLabels(languages[lang])
+      if (lang === 'es') {
+        setSpanishLang(true)
+      }
+    }
   }, [])
 
   const updateLanguage = () => {
@@ -281,9 +290,11 @@ const PopoverMenu = React.forwardRef((props, ref) => {
     if (newLanguageIsSpanish) {
       setLabels(languages.es)
       setSpanishLang(true)
+      localStorage.setItem('twitch-messages-lang', 'es')
     } else {
       setLabels(languages.en)
       setSpanishLang(false)
+      localStorage.setItem('twitch-messages-lang', 'en')
     }
   }
 
