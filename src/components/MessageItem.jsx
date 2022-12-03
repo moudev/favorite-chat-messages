@@ -18,6 +18,7 @@ const MessageItem = ({
   removeMessage,
   updateMessage,
   avoidUniqueChat,
+  labels,
   ...props
 }) => {
   const [editMode, setEditMode] = useState(false)
@@ -110,17 +111,17 @@ const MessageItem = ({
                 : () => setEditMode(true)
             }
           >
-            {editMode ? 'Guardar' : 'Editar'}
+            {editMode ? labels.saveButton : labels.editButton}
           </Button>
           <Button
             disabled={editMode}
             size="xs"
             onClick={() => removeMessage(index)}
           >
-            Borrar
+            {labels.deleteButton}
           </Button>
           <Button size="xs" onClick={() => copyMessage(message)}>
-            Copiar
+            {labels.copyButton}
           </Button>
         </div>
       </div>
@@ -137,7 +138,7 @@ const MessageItem = ({
           disabled={editMode}
           onClick={() => sendMessage(message)}
         >
-          Enviar
+          {labels.sendButton}
         </Button>
       </div>
     </div>

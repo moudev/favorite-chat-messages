@@ -6,6 +6,7 @@ import {
   Input,
   Loader,
   Checkbox,
+  Toggle,
 } from 'rsuite'
 import parse from 'html-react-parser'
 
@@ -20,7 +21,13 @@ import {
 import { getAllEmotes } from '../fetch-emotes.js'
 import { renderEmoji } from '../utils.js'
 
-const PopoverMenuHeader = ({ messages, setMessages }) => {
+const PopoverMenuHeader = ({
+  messages,
+  setMessages,
+  labels,
+  spanishLang,
+  updateLanguage,
+}) => {
   const [message, setMessage] = useState('')
 
   const save = () => {
@@ -45,18 +52,36 @@ const PopoverMenuHeader = ({ messages, setMessages }) => {
         <Input
           as="textarea"
           rows={2}
-          placeholder="Message"
+          placeholder={labels.inputPlaceholder}
           onChange={(text) => setMessage(text)}
         />
       </div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Button
-          style={{ flex: '1' }}
-          onClick={() => save()}
-          disabled={!message}
-        >
-          Guardar
-        </Button>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ width: '100%' }}>
+          <Button
+            style={{ width: '100%' }}
+            onClick={() => save()}
+            disabled={!message}
+          >
+            {labels.saveButton}
+          </Button>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <Toggle
+            size="md"
+            checkedChildren="Español"
+            unCheckedChildren="English"
+            onChange={updateLanguage}
+            checked={spanishLang}
+          />
+        </div>
       </div>
     </div>
   )
@@ -70,6 +95,7 @@ const PopoverMenuBody = ({
   avoidUniqueChat,
   messages,
   setMessages,
+  labels,
 }) => {
   const [position, setPosition] = useState({ start: 0, end: 0 })
 
@@ -199,6 +225,7 @@ const PopoverMenuBody = ({
             moveMessage={moveMessage}
             removeMessage={removeMessage}
             updateMessage={updateMessage}
+            labels={labels}
           />
         ))}
     </div>
@@ -213,6 +240,30 @@ const PopoverMenu = React.forwardRef((props, ref) => {
   const [closeMenuAfterSendMessage, setCloseMenuAfterSendMessage] =
     useState(true)
   const [avoidUniqueChat, setAvoidUniqueChat] = useState(false)
+  const [spanishLang, setSpanishLang] = useState(false)
+  const languages = {
+    en: {
+      saveButton: 'Save',
+      inputPlaceholder: 'Message',
+      sendButton: 'Send',
+      editButton: 'Edit',
+      deleteButton: 'Delete',
+      copyButton: 'Copy',
+      closeModalAfterSendMessageCheckbox: 'Close menu after send a message',
+      avoidUniqueChatCheckbox: 'Avoid unique chat',
+    },
+    es: {
+      saveButton: 'Guardar',
+      inputPlaceholder: 'Mensaje',
+      sendButton: 'Enviar',
+      editButton: 'Editar',
+      deleteButton: 'Borrar',
+      copyButton: 'Copiar',
+      closeModalAfterSendMessageCheckbox: 'Cerrar menú despues de enviar',
+      avoidUniqueChatCheckbox: 'Evitar chat único',
+    },
+  }
+  const [labels, setLabels] = useState(languages.en)
 
   useEffect(() => {
     const fetchEmotes = async () => {
@@ -225,17 +276,31 @@ const PopoverMenu = React.forwardRef((props, ref) => {
     setMessages(getMessages())
   }, [])
 
+  const updateLanguage = () => {
+    const newLanguageIsSpanish = !spanishLang
+    if (newLanguageIsSpanish) {
+      setLabels(languages.es)
+      setSpanishLang(true)
+    } else {
+      setLabels(languages.en)
+      setSpanishLang(false)
+    }
+  }
+
   return (
     <CustomProvider theme="dark">
       <Popover
         {...props}
         ref={ref}
-        style={{ width: '350px', backgroundColor: '#292d33' }}
+        style={{ width: '350px', backgroundColor: '#292d33', zIndex: '1' }}
       >
         <PopoverMenuHeader
           toggleWhisper={props.toggleWhisper}
           messages={messages}
           setMessages={setMessages}
+          labels={labels}
+          spanishLang={spanishLang}
+          updateLanguage={updateLanguage}
         />
         <div
           style={{
@@ -252,13 +317,13 @@ const PopoverMenu = React.forwardRef((props, ref) => {
               setCloseMenuAfterSendMessage(!closeMenuAfterSendMessage)
             }
           >
-            Close menu after send a message
+            {labels.closeModalAfterSendMessageCheckbox}
           </Checkbox>
           <Checkbox
             checked={avoidUniqueChat}
             onChange={() => setAvoidUniqueChat(!avoidUniqueChat)}
           >
-            Avoid unique chat
+            {labels.avoidUniqueChatCheckbox}
           </Checkbox>
         </div>
         <PopoverMenuBody
@@ -269,6 +334,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
           avoidUniqueChat={avoidUniqueChat}
           messages={messages}
           setMessages={setMessages}
+          labels={labels}
         />
       </Popover>
     </CustomProvider>
