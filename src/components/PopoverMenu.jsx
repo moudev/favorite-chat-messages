@@ -7,7 +7,9 @@ import {
   Loader,
   Checkbox,
   Toggle,
+  IconButton,
 } from 'rsuite'
+import DragableIcon from '@rsuite/icons/Dragable'
 import parse from 'html-react-parser'
 
 import { MessageItem } from './MessageItem.jsx'
@@ -298,13 +300,33 @@ const PopoverMenu = React.forwardRef((props, ref) => {
     }
   }
 
+  const handleDragEnd = (e) => {
+    if (e.target?.parentElement?.parentElement) {
+      e.target.parentElement.parentElement.style.top = e.clientY + 'px'
+      e.target.parentElement.parentElement.style.left = e.clientX + 'px'
+    }
+  }
+
   return (
     <CustomProvider theme="dark">
       <Popover
         {...props}
         ref={ref}
-        style={{ width: '350px', backgroundColor: '#292d33', zIndex: '1' }}
+        style={{ width: '350px', backgroundColor: '#292d33', zIndex: '10' }}
       >
+        <div
+          style={{
+            cursor: 'pointer',
+            position: 'absolute',
+            top: '-16px',
+            left: '-20px',
+          }}
+          draggable
+          onDragEnd={handleDragEnd}
+        >
+          <IconButton icon={<DragableIcon />} circle style={{ zIndex: '-1' }} />
+        </div>
+
         <PopoverMenuHeader
           toggleWhisper={props.toggleWhisper}
           messages={messages}
