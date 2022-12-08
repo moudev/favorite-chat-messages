@@ -227,7 +227,6 @@ const PopoverMenuBody = ({
             convertedMessageToJSX={parse(transformMessage(message.text))}
             closeMenuAfterSendMessage={closeMenuAfterSendMessage}
             avoidUniqueChat={avoidUniqueChat}
-            draggable
             onDragStart={() => handleDragStart(index)}
             onDragEnd={() => handleDragEnd(index)}
             onDragEnter={() => handleDragEnter(index)}

@@ -23,6 +23,7 @@ const MessageItem = ({
 }) => {
   const [editMode, setEditMode] = useState(false)
   const [localMessageText, setLocalMessageText] = useState(message)
+  const [focused, setFocused] = useState(false)
 
   const sendMessage = (text) => {
     let msg = text
@@ -37,8 +38,10 @@ const MessageItem = ({
     }
   }
 
+  /** solves draggable error to select text in edit mode: https://github.com/react-dnd/react-dnd/issues/178#issuecomment-1216083884 */
   return (
     <div
+      draggable={!focused}
       style={{
         display: 'flex',
         border: '1px solid #3c3f43',
@@ -93,6 +96,8 @@ const MessageItem = ({
               placeholder="Message"
               onChange={(e) => setLocalMessageText(e)}
               value={localMessageText}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
             />
           ) : (
             <p style={{ wordBreak: 'break-all' }}>
