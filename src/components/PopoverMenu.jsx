@@ -8,6 +8,7 @@ import {
   Checkbox,
   Toggle,
   IconButton,
+  Panel,
 } from 'rsuite'
 import DragableIcon from '@rsuite/icons/Dragable'
 import parse from 'html-react-parser'
@@ -38,7 +39,6 @@ const PopoverMenuHeader = ({
     }
 
     saveMessage(message)
-    console.log('message', message)
     setMessages([{ text: message }, ...messages])
     setMessage('')
   }
@@ -47,26 +47,41 @@ const PopoverMenuHeader = ({
     <div
       style={{
         display: 'flex',
-        gap: '0.5rem',
+        flexDirection: 'column',
       }}
     >
-      <div style={{ flex: '2', display: 'flex', flexDirection: 'column' }}>
-        <Input
-          as="textarea"
-          rows={2}
-          placeholder={labels.inputPlaceholder}
-          onChange={(text) => setMessage(text)}
-        />
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
+      <Panel
+        header={
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Toggle
+              size="md"
+              checkedChildren="Español"
+              unCheckedChildren="English"
+              onChange={updateLanguage}
+              checked={spanishLang}
+            />
+            <Button style={{ zIndex: '1', position: 'absolute', right: '0px' }}>
+              {labels.panelTitle}
+            </Button>
+          </div>
+        }
+        collapsible
+        style={{ padding: '0px' }}
       >
-        <div style={{ width: '100%' }}>
+        <div>
+          <Input
+            as="textarea"
+            rows={2}
+            placeholder={labels.inputPlaceholder}
+            onChange={(text) => setMessage(text)}
+            style={{ marginBottom: '0.5rem' }}
+          />
           <Button
             style={{ width: '100%' }}
             onClick={() => save()}
@@ -75,16 +90,7 @@ const PopoverMenuHeader = ({
             {labels.saveButton}
           </Button>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Toggle
-            size="md"
-            checkedChildren="Español"
-            unCheckedChildren="English"
-            onChange={updateLanguage}
-            checked={spanishLang}
-          />
-        </div>
-      </div>
+      </Panel>
     </div>
   )
 }
@@ -245,6 +251,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
   const [spanishLang, setSpanishLang] = useState(false)
   const languages = {
     en: {
+      panelTitle: 'New',
       saveButton: 'Save',
       inputPlaceholder: 'Message',
       sendButton: 'Send',
@@ -255,6 +262,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       avoidUniqueChatCheckbox: 'Avoid unique chat',
     },
     es: {
+      panelTitle: 'Nuevo',
       saveButton: 'Guardar',
       inputPlaceholder: 'Mensaje',
       sendButton: 'Enviar',
@@ -312,7 +320,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       <Popover
         {...props}
         ref={ref}
-        style={{ width: '350px', backgroundColor: '#292d33', zIndex: '10' }}
+        style={{ width: '350px', backgroundColor: '#292d33', zIndex: '1000' }}
       >
         <div
           style={{
@@ -339,7 +347,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            margin: '1rem 0rem',
+            margin: '0rem 0rem 1rem 0rem',
             alignItems: 'flex-end',
             flexDirection: 'column',
           }}
