@@ -81,6 +81,7 @@ const PopoverMenuHeader = ({
             placeholder={labels.inputPlaceholder}
             onChange={(text) => setMessage(text)}
             style={{ marginBottom: '0.5rem' }}
+            value={message}
           />
           <Button
             style={{ width: '100%' }}
