@@ -22,8 +22,8 @@ Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new sc
 
 ```javascript
 // ==UserScript==
-// @name         One Click Twitch Message
-// @description  Create collections of messages and send them with a single click.
+// @name         Favorite chat messages
+// @description  Create a collection of favorite messages and send them with only one click
 // @version      0.0.1
 // @match        https://*.twitch.tv/*
 // @grant        none
@@ -32,14 +32,14 @@ Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new sc
 (function oneClickTwitchMessage() {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'http://127.0.0.1:5173/one-click-twitch-message.js';
+    script.src = 'http://127.0.0.1:5173/favorite-chat-messages.js';
     const head = document.getElementsByTagName('head')[0];
     if (!head) return;
     head.appendChild(script);
 
     const style = document.createElement("link")
     style.rel="stylesheet"
-    style.href="http://127.0.0.1:5173/one-click-twitch-message.css"
+    style.href="http://127.0.0.1:5173/favorite-chat-messages.css"
     head.appendChild(style);
 })()
 ```

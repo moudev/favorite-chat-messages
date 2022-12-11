@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "One click Twitch message",
+  "name": "Favorite chat messages",
   "description": "Save and send messages with one click to Twitch chat. You can save your favorites messages and send them with only one click",
-  "homepage_url": "https://github.com/moudev/one-click-twitch-message",
+  "homepage_url": "https://github.com/moudev/favorite-chat-messages",
 
   "version": "0.0.1",
 
@@ -13,8 +13,8 @@
     "48": "icons/icon-48.png"
   },
   "web_accessible_resources": [
-    "build/one-click-twitch-message.js",
-    "build/one-click-twitch-message.css"
+    "build/favorite-chat-messages.js",
+    "build/favorite-chat-messages.css"
   ],
   "content_scripts": [
     {

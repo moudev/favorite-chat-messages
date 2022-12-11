@@ -11,7 +11,7 @@ module.exports = {
     },
   },
   entry: {
-    'one-click-twitch-message': ['./src/index.js'],
+    'favorite-chat-messages': ['./src/index.js'],
   },
   output: {
     filename: '[name].js',
