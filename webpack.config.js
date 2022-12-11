@@ -7,7 +7,7 @@ module.exports = {
     port: '5173',
     allowedHosts: ['127.0.0.1', '.twitch.tv'],
     static: {
-      directory: path.resolve('./webpack-build'),
+      directory: path.resolve('./src/build'),
     },
   },
   entry: {
@@ -15,7 +15,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve('./webpack-build'),
+    path: path.resolve('./src/build'),
   },
   plugins: [
     new MiniCssExtractPlugin({
