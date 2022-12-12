@@ -48,50 +48,34 @@ const PopoverMenuHeader = ({
       style={{
         display: 'flex',
         flexDirection: 'column',
+        gap: '1rem',
       }}
     >
-      <Panel
-        header={
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Toggle
-              size="md"
-              checkedChildren="Español"
-              unCheckedChildren="English"
-              onChange={updateLanguage}
-              checked={spanishLang}
-            />
-            <Button style={{ zIndex: '1', position: 'absolute', right: '0px' }}>
-              {labels.panelTitle}
-            </Button>
-          </div>
-        }
-        collapsible
-        style={{ padding: '0px' }}
-      >
-        <div>
-          <Input
-            as="textarea"
-            rows={2}
-            placeholder={labels.inputPlaceholder}
-            onChange={(text) => setMessage(text)}
-            style={{ marginBottom: '0.5rem' }}
-            value={message}
-          />
-          <Button
-            style={{ width: '100%' }}
-            onClick={() => save()}
-            disabled={!message}
-          >
-            {labels.saveButton}
-          </Button>
-        </div>
-      </Panel>
+      <Toggle
+        size="md"
+        checkedChildren="Español"
+        unCheckedChildren="English"
+        onChange={updateLanguage}
+        checked={spanishLang}
+        style={{ alignSelf: 'flex-end' }}
+      />
+      <div>
+        <Input
+          as="textarea"
+          rows={2}
+          placeholder={labels.inputPlaceholder}
+          onChange={(text) => setMessage(text)}
+          style={{ marginBottom: '0.5rem' }}
+          value={message}
+        />
+        <Button
+          style={{ width: '100%' }}
+          onClick={() => save()}
+          disabled={!message}
+        >
+          {labels.saveButton}
+        </Button>
+      </div>
     </div>
   )
 }
@@ -251,7 +235,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
   const [spanishLang, setSpanishLang] = useState(false)
   const languages = {
     en: {
-      panelTitle: 'New',
+      panelTitle: 'Options',
       saveButton: 'Save',
       inputPlaceholder: 'Message',
       sendButton: 'Send',
@@ -262,7 +246,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       avoidUniqueChatCheckbox: 'Avoid unique chat',
     },
     es: {
-      panelTitle: 'Nuevo',
+      panelTitle: 'Opciones',
       saveButton: 'Guardar',
       inputPlaceholder: 'Mensaje',
       sendButton: 'Enviar',
@@ -335,38 +319,45 @@ const PopoverMenu = React.forwardRef((props, ref) => {
           <IconButton icon={<DragableIcon />} circle style={{ zIndex: '-1' }} />
         </div>
 
-        <PopoverMenuHeader
-          toggleWhisper={props.toggleWhisper}
-          messages={messages}
-          setMessages={setMessages}
-          labels={labels}
-          spanishLang={spanishLang}
-          updateLanguage={updateLanguage}
-        />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            margin: '0rem 0rem 1rem 0rem',
-            alignItems: 'flex-end',
-            flexDirection: 'column',
-          }}
+        <Panel
+          header={<Button>{labels.panelTitle}</Button>}
+          collapsible
+          style={{ padding: '0px' }}
         >
-          <Checkbox
-            checked={closeMenuAfterSendMessage}
-            onChange={() =>
-              setCloseMenuAfterSendMessage(!closeMenuAfterSendMessage)
-            }
+          <PopoverMenuHeader
+            toggleWhisper={props.toggleWhisper}
+            messages={messages}
+            setMessages={setMessages}
+            labels={labels}
+            spanishLang={spanishLang}
+            updateLanguage={updateLanguage}
+          />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              margin: '0rem 0rem 1rem 0rem',
+              alignItems: 'flex-end',
+              flexDirection: 'column',
+            }}
           >
-            {labels.closeModalAfterSendMessageCheckbox}
-          </Checkbox>
-          <Checkbox
-            checked={avoidUniqueChat}
-            onChange={() => setAvoidUniqueChat(!avoidUniqueChat)}
-          >
-            {labels.avoidUniqueChatCheckbox}
-          </Checkbox>
-        </div>
+            <Checkbox
+              checked={closeMenuAfterSendMessage}
+              onChange={() =>
+                setCloseMenuAfterSendMessage(!closeMenuAfterSendMessage)
+              }
+            >
+              {labels.closeModalAfterSendMessageCheckbox}
+            </Checkbox>
+            <Checkbox
+              checked={avoidUniqueChat}
+              onChange={() => setAvoidUniqueChat(!avoidUniqueChat)}
+            >
+              {labels.avoidUniqueChatCheckbox}
+            </Checkbox>
+          </div>
+        </Panel>
+
         <PopoverMenuBody
           toggleWhisper={props.toggleWhisper}
           emotes={emotes}
