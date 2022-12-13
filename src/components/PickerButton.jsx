@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react'
 import { Whisper, Button } from 'rsuite'
 
-import { PopoverMenu } from './PopoverMenu.jsx'
+import { PopoverMenu } from './PopoverMenu/PopoverMenu.jsx'
 
 const PickerButton = () => {
   // https://github.com/night/betterttv/blob/7.4.40/src/modules/emote_menu/components/LegacyButton.jsx#L18
