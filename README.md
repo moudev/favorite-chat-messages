@@ -1,24 +1,12 @@
-# One click Twitch message
+# Favorite chat messages
 
-Create collections of messages and send them with a single click.
+Firefox plugin. Save your favorite messages and send them with one click to the Twitch chat.
+
+Based on [betterttv](https://github.com/night/betterttv) plugin.
 
 ## Development
 
-Execute the two commands at the same time on different consoles.
-
-In a console build the files and watch the changes:
-
-```bash
-npm run dev
-```
-
-In another console to serve the files:
-
-```bash
-npm run serve
-```
-
-Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new script:
+Install [tampermonkey](https://www.tampermonkey.net/) plugin in your Firefox browser and create a new script:
 
 ```javascript
 // ==UserScript==
@@ -29,7 +17,7 @@ Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new sc
 // @grant        none
 // ==/UserScript==
 
-(function oneClickTwitchMessage() {
+(function FavoriteChatMessages() {
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'http://127.0.0.1:5173/favorite-chat-messages.js';
@@ -42,4 +30,48 @@ Install [tampermonkey](https://www.tampermonkey.net/) plugin and create a new sc
     style.href="http://127.0.0.1:5173/favorite-chat-messages.css"
     head.appendChild(style);
 })()
+```
+
+### Dev server
+
+This command does the build with webpack and then serves the files. Files specified in the tampermonkey script. When you make a change it's necessary to reload the chat. Webpack does the build automatically when you make a change.
+
+```bash
+npm run dev
+```
+
+## Scripts
+
+### build:pre-firefox
+
+Webpack builds the javascript files and saves them in the src/build directory. These files are packed in the final firefox plugin build. This command only creates the build of the files.
+
+```bash
+npm run build:pre-firefox
+```
+
+### build:firefox
+
+Command to create the plugin file. Make sure before executing this command, execute the `build:pre-firefox` script to use the recent version of the javascript files.
+
+```bash
+npm run build:firefox
+```
+
+### publish
+
+This command executes `build:pre-firefox` and `build:firefox` in one step.
+
+```bash
+npm run publish
+```
+
+## Lint
+
+```bash
+npm run lint
+```
+
+```bash
+npm run lint:fix
 ```
