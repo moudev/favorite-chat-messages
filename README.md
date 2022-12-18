@@ -75,3 +75,11 @@ npm run lint
 ```bash
 npm run lint:fix
 ```
+
+## Screenshots
+
+![favorite-messages-1](https://user-images.githubusercontent.com/13499566/208272152-a6d32291-c368-42a0-8a4c-52d184dc077a.PNG)
+
+</br>
+
+![favorite-messages-options](https://user-images.githubusercontent.com/13499566/208272150-908ddc14-5de5-46e9-b11f-a51be6a8a257.PNG)
