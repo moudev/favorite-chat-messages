@@ -115,7 +115,9 @@ const PopoverMenuBody = ({
         </div>
       )}
 
-      {(!messages || messages.length === 0) && <p>No saved messages</p>}
+      {(!messages || messages.length === 0) && (
+        <p style={{ textAlign: 'center' }}>{labels.notMessages}</p>
+      )}
 
       {!loadingEmotes &&
         messages.map((message, index) => (

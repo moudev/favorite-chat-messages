@@ -34,6 +34,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       copyButton: 'Copy',
       closeModalAfterSendMessageCheckbox: 'Close menu after send a message',
       avoidUniqueChatCheckbox: 'Avoid unique chat',
+      notMessages: 'No saved messages',
     },
     es: {
       panelTitle: 'Opciones',
@@ -46,6 +47,7 @@ const PopoverMenu = React.forwardRef((props, ref) => {
       closeModalAfterSendMessageCheckbox:
         'Cerrar menú despues de enviar mensaje',
       avoidUniqueChatCheckbox: 'Evitar chat único',
+      notMessages: 'No hay mensajes guardados',
     },
   }
   const [labels, setLabels] = useState(languages.en)
