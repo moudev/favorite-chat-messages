@@ -35,7 +35,7 @@ class Menu {
     const buttonContainer = document.createElement('div')
     buttonContainer.setAttribute(
       'data-a-target',
-      'one-click-twitch-message-picker-button-container'
+      'favorite-chat-messages-picker-button-container'
     )
     rightContainer.insertBefore(buttonContainer, rightContainer.lastChild)
 
