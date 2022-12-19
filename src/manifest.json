@@ -5,7 +5,7 @@
   "description": "Save and send messages with one click to Twitch chat. You can save your favorites messages and send them with only one click",
   "homepage_url": "https://github.com/moudev/favorite-chat-messages",
 
-  "version": "0.0.1",
+  "version": "0.0.2",
 
   "icons": {
     "16": "icons/icon-16.png",
